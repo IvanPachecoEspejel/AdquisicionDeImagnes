@@ -14,7 +14,7 @@ logger = Util.getLogger("Imagen")
 class Imagen(object):
     ''' Objeto que abstrae las caracteristicas y funcionalidades de una rutade imagen local o web '''
 
-    def __init__(self, source, clase):
+    def __init__(self, source, clase = None):
         if Valida.isImagen(source):
             self.source = source
             self.tipoRuta = Clasifica.tipoRuta(source);
@@ -47,12 +47,12 @@ class Imagen(object):
         '''Regresa la extencion del archivo sin el '.' '''
         return self.source[self.source.rfind('.')+1:]
     
-    def equals(self, ruta):
+    def __eq__(self, imagen):
         '''Regresa la comparacion entre otro objeto del mismo tipo'''
-        return self.source == ruta.source;
+        return self.source == imagen.source and self.clase == imagen.clase;
     
-    def getHashCode(self):
-        return str(self.source) + str(self.clase)
+    def __hash__(self):
+        return hash(str(self.clase)+self.source)
     
 if __name__ == "__main__":
     
