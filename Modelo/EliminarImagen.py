@@ -12,21 +12,21 @@ class EliminarImagen(Accion):
     '''
         
     def efectuarAccion(self):
-        if self.accionRealizada:
+        if not self.accionRealizada:
             for img in self.imgsAfectadas:
                 self.__removerImagen(img)
-            self.accionRealizada = False 
+            self.accionRealizada = True
+            self.__actualizarHistorial() 
         else:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Hacer_Accion"))
         
     def deshacerAccion(self):
         
-        if not self.accionRealizada :
+        if self.accionRealizada :
             for img in self.imgsAfectadas:
                 self.__agregarImagen(img)
                 
-            self.accionRealizada = True
-            self.__actualizarHistorial()
+            self.accionRealizada = False
         else:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Deshacer_Accion"))
         

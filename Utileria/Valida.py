@@ -16,12 +16,19 @@ def isImagen(sourceRuta):
     return extension in Util.getMnsjConf('Validacion', 'Extenciones')
 
 def imagenExistenteOnClase(imagen, clase):
-    if(not clase.has_key(imagen.__hash__())):
+    if(clase.get(imagen.__hash__()) in (None, [])):
         return False
-    else: #Tomo en cuenta un error cuando el diccionario es demaciado grande y se solapan las llaves
+    else:
         if imagen.__eq__(clase[imagen.__hash__()]):
             return True
+        #Tomo en cuenta un error cuando el diccionario es demaciado grande y se solapan las llaves
         raise Exception(Util.getMnsjIdioma("Accion", "Error_Solapan_Hash"))
+
+def nomClase(nomClase):
+    return nomClase is None 
     
-    
+def exitenciaClase(nomClase, clases):
+    if clases.get(nomClase) in (None, []):
+        return False
+    return True
     

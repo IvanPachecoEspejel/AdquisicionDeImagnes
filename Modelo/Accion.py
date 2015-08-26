@@ -54,6 +54,9 @@ class Accion(object):
                 logger.info("Imagen "+imagen.source+" agregada a la clase "+imagen.nomClase)
             else:
                 logger.info("Imagen "+imagen.source+"no se puede agregar porque ya existe en esta clase "+imagen.nomClase)
+        except KeyError:
+            logger.error("Clase "+imagen.nomClase+" inexistente")
+            raise Exception(Util.getMnsjConf('Accion', 'Error_Clase_Inexistente'))
         except Exception as e:
             raise e
         
@@ -64,14 +67,14 @@ class Accion(object):
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Remover_None"))
         
         try:
-            if Valida.imagenExistenteOnClase(imagen, self.clases[imagen.nomClase]):
-                self.clases[imagen.nomClase][imagen.__hash__()] = []
-                logger.info("Imagen "+imagen.source+" removida de la clase "+imagen.nomClase)
-            else:
-                logger.info("Imagen "+imagen.source+" no se puede remover, porque no esta en la clase "+imagen.nomClase)
+            self.clases[imagen.nomClase][imagen.__hash__()] = []
+            logger.info("Imagen "+imagen.source+" removida de la clase "+imagen.nomClase)
+        except KeyError:
+            logger.error("Clase "+imagen.nomClase+" inexistente")
+            raise Exception(Util.getMnsjConf('Accion', 'Error_Clase_Inexistente'))
         except Exception as e:
             raise e
-        
+
 if __name__ == '__main__':
     prueba2 = Imagen("/home/ivan/Imagenes/fondos/02E3A832D.jpg")
     a = Accion(1,prueba2)
