@@ -15,19 +15,13 @@ def isImagen(sourceRuta):
     extension =  sourceRuta[sourceRuta.rfind('.')+1:]
     return extension in Util.getMnsjConf('Validacion', 'Extenciones')
 
-def imagenExistente(imagen, clase):
-    if(clase[imagen.__hash__()] is None):
+def imagenExistenteOnClase(imagen, clase):
+    if(not clase.has_key(imagen.__hash__())):
         return False
-    else:
+    else: #Tomo en cuenta un error cuando el diccionario es demaciado grande y se solapan las llaves
         if imagen.__eq__(clase[imagen.__hash__()]):
             return True
         raise Exception(Util.getMnsjIdioma("Accion", "Error_Solapan_Hash"))
-  
-if __name__ == "__main__":
-        
-    logger.info("Pruebas unitaras para function's Valida")
-    logger.info("TEST FOR def isImagen(sourceRuta):")
-    print (isImagen("adfasdf.jpg"));
     
     
     
