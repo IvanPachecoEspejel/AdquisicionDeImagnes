@@ -30,4 +30,11 @@ class AgregarImagen(Accion):
                 self.__removerImagen(img)
             self.accionRealizada = False
         else:
-            raise Exception(Util.getMnsjIdioma("Accion", "Error_Deshacer_Accion")) 
+            raise Exception(Util.getMnsjIdioma("Accion", "Error_Deshacer_Accion"))
+        
+        
+        
+        
+        
+        
+         

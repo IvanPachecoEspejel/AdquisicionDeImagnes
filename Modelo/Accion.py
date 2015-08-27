@@ -4,11 +4,12 @@ from Utileria.Imagen import Imagen
 import Utileria.Valida as Valida
 
 logger = Util.getLogger("Accion")
+
 nomClaseDefault = 'Clase_Default'
+claseDefault = {}
 
 class Accion(object):
     
-    claseDefault = {}
     clases = {nomClaseDefault:claseDefault}
     
     pilaAcciones = ()
@@ -74,6 +75,13 @@ class Accion(object):
             raise Exception(Util.getMnsjConf('Accion', 'Error_Clase_Inexistente'))
         except Exception as e:
             raise e
+        
+    def __moverImagen(self, imagen, claseDestino=nomClaseDefault):
+        if imagen is not None:
+            imagen.clase = claseDestino
+        else:
+            logger.error("Error la imagen es None no se puede mover")
+            raise Exception(Util.getMnsjIdioma('Accion', 'Error_Imagen_None'))
 
 if __name__ == '__main__':
     prueba2 = Imagen("/home/ivan/Imagenes/fondos/02E3A832D.jpg")
