@@ -80,6 +80,7 @@ if __name__ == '__main__':
     print 'Clases Registrada'
     for clase in Accion.clases:
         print clase
+    print " "
     
     moverImagenes = MoverImagen(a, Accion.nomClaseDefault, 'Clase2')
     moverImagenes.efectuarAccion()
@@ -91,6 +92,7 @@ if __name__ == '__main__':
     print 'Clases Registrada'
     for clase in Accion.clases:
         print clase
+    print " "
         
     moverImagenes.deshacerUltimaAccion()
     
@@ -101,3 +103,4 @@ if __name__ == '__main__':
     print 'Clases Registrada'
     for clase in Accion.clases:
         print clase
+    print " "

@@ -38,6 +38,7 @@ if __name__ == '__main__':
     img1 = Imagen("/home/ivan/Imagenes/fondos/02E3A832D.jpg")
     img2 = Imagen("/home/ivan/Imagenes/fondos/1_rajathilaknatarajan-redsky.jpg")
     a = (img1, img2)
+    
     agregarImgs = AgregarImagen(a)
     agregarImgs.efectuarAccion()
     print 'Clases: '
@@ -47,6 +48,7 @@ if __name__ == '__main__':
     print 'Clases Registrada'
     for clase in Accion.clases:
         print clase
+        
     agregarImgs.deshacerUltimaAccion()
     print 'Clases: '
     print Accion.clases

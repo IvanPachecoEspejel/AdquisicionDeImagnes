@@ -17,9 +17,10 @@ def isImagen(sourceRuta):
 
 def imagenExistenteOnClase(imagen, clase):
     '''
-    Valida que la imagen dada esta contenida en la clase dada
+        Valida que la imagen dada esta contenida en la clase dada
     '''
-    if(clase.get(imagen.__hash__()) in (None, [])):
+    
+    if(clase.get(imagen.__hash__()) is None):
         return False
     else:
         if imagen.__eq__(clase[imagen.__hash__()]):
@@ -48,6 +49,6 @@ def exitenciaClase(nomClase, clases):
     '''
     Funcion que valida que la clase nomClase este contenida en la lista clases
     '''
-    if clases.get(nomClase) in (None, []):
+    if clases.get(nomClase) is None:
         return False
     return True
