@@ -3,8 +3,10 @@ Created on 24/08/2015
 
 @author: ivan
 '''
-import Accion.Accion as Accion
+from Accion import Accion
 import Utileria.Util as Util
+from AgregarImagen import AgregarImagen
+from Utileria.Imagen import Imagen
 
 class EliminarImagen(Accion):
     '''
@@ -14,9 +16,9 @@ class EliminarImagen(Accion):
     def efectuarAccion(self):
         if not self.accionRealizada:
             for img in self.imgsAfectadas:
-                self.__removerImagen(img)
+                self.removerImagen(img)
             self.accionRealizada = True
-            self.__actualizarHistorial() 
+            self.actualizarHistorial() 
         else:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Hacer_Accion"))
         
@@ -24,10 +26,42 @@ class EliminarImagen(Accion):
         
         if self.accionRealizada :
             for img in self.imgsAfectadas:
-                self.__agregarImagen(img)
+                self.agregarImagen(img)
                 
             self.accionRealizada = False
         else:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Deshacer_Accion"))
         
+if __name__ == '__main__':
+    img1 = Imagen("/home/ivan/Imagenes/fondos/02E3A832D.jpg")
+    img2 = Imagen("/home/ivan/Imagenes/fondos/1_rajathilaknatarajan-redsky.jpg")
+    a = (img1, img2)
+    agregarImgs = AgregarImagen(a)
+    agregarImgs.efectuarAccion()
+    print 'Clases: '
+    print Accion.clases
+    print 'Pila de Acciones'
+    print Accion.pilaAcciones
+    print 'Clases Registrada'
+    for clase in Accion.clases:
+        print clase
+    
+    removerImgs = EliminarImagen(a)
+    removerImgs.efectuarAccion()
+    
+    print 'Clases: '
+    print Accion.clases
+    print 'Pila de Acciones'
+    print Accion.pilaAcciones
+    print 'Clases Registrada'
+    for clase in Accion.clases:
+        print clase
         
+    removerImgs.deshacerUltimaAccion()
+    print 'Clases: '
+    print Accion.clases
+    print 'Pila de Acciones'
+    print Accion.pilaAcciones
+    print 'Clases Registrada'
+    for clase in Accion.clases:
+        print clase

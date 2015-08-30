@@ -5,31 +5,30 @@ import Utileria.Valida as Valida
 
 logger = Util.getLogger("Accion")
 
-nomClaseDefault = 'Clase_Default'
-claseDefault = {}
-
 class Accion(object):
     
-    clases = {nomClaseDefault:claseDefault}
+    nomClaseDefault = 'Clase_Default'
+    claseDefault = {}
     
-    pilaAcciones = ()
+    clases = {nomClaseDefault:claseDefault}
+    pilaAcciones = []
     
     def __init__(self, imgsAfectadas):
         self.imgsAfectadas=imgsAfectadas
         self.accionRealizada = False
-        
+    
     def efectuarAccion(self):
         ''' Realiza la accion evitando que se repita '''
-        pass
+        return
     
-    def __deshacerAccion(self):
+    def deshacerAccion(self):
         ''' 
         Deshace la accion del propio objeto sin eliminarla del historial,
         es por eso que esta accion debe de ser llamada desde la funcion
         deshacerUtilmaAccion(self)
         '''
-        pass
-        
+        return
+    
     def deshacerUltimaAccion(self):
         ''' Deshace la ultima accion realizada eliminandola del historial'''
         if self.accionRealizada:
@@ -37,18 +36,18 @@ class Accion(object):
         else:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Deshacer_Accion"))
         
-    def __actualizarHistorial(self):
+    def actualizarHistorial(self):
         ''' Agrega esta accion al historial evitando que se repita '''
         if self.accionRealizada:
             self.pilaAcciones.append(self)
         else:
             logger.info("No se agrego ninguna accion al historial, la accion no se ha efectuado")
         
-    def __agregarImagen(self, imagen):
+    def agregarImagen(self, imagen):
         '''Agrega una imagen al diccionario de la nomClase que trae seteada'''
         
         if imagen.nomClase is None :
-            imagen.nomClase = nomClaseDefault     
+            imagen.nomClase = self.nomClaseDefault     
         try:
             if not Valida.imagenExistenteOnClase(imagen,self.clases[imagen.nomClase]):
                 self.clases[imagen.nomClase][imagen.__hash__()] = imagen
@@ -61,14 +60,14 @@ class Accion(object):
         except Exception as e:
             raise e
         
-    def __removerImagen(self, imagen):
+    def removerImagen(self, imagen):
         '''Remueve una imagen de la nomClase en la que se encuentra '''
         
         if imagen.nomClase is None:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Remover_None"))
         
         try:
-            self.clases[imagen.nomClase][imagen.__hash__()] = []
+            del self.clases[imagen.nomClase][imagen.__hash__()]
             logger.info("Imagen "+imagen.source+" removida de la clase "+imagen.nomClase)
         except KeyError:
             logger.error("Clase "+imagen.nomClase+" inexistente")
@@ -76,9 +75,9 @@ class Accion(object):
         except Exception as e:
             raise e
         
-    def __moverImagen(self, imagen, claseDestino=nomClaseDefault):
+    def moverImagen(self, imagen, claseDestino):
         if imagen is not None:
-            imagen.clase = claseDestino
+            imagen.nomClase = claseDestino
         else:
             logger.error("Error la imagen es None no se puede mover")
             raise Exception(Util.getMnsjIdioma('Accion', 'Error_Imagen_None'))

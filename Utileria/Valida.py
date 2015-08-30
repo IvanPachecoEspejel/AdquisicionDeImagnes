@@ -16,6 +16,9 @@ def isImagen(sourceRuta):
     return extension in Util.getMnsjConf('Validacion', 'Extenciones')
 
 def imagenExistenteOnClase(imagen, clase):
+    '''
+    Valida que la imagen dada esta contenida en la clase dada
+    '''
     if(clase.get(imagen.__hash__()) in (None, [])):
         return False
     else:
@@ -23,12 +26,28 @@ def imagenExistenteOnClase(imagen, clase):
             return True
         #Tomo en cuenta un error cuando el diccionario es demaciado grande y se solapan las llaves
         raise Exception(Util.getMnsjIdioma("Accion", "Error_Solapan_Hash"))
+    
+def imagenesExistenteOnClase(imgs, clase):
+    '''
+    Funcion que valida que todas las imagenes estan contenidas en la clase dada
+    '''
+    print type(imgs)
+    for img in imgs:
+        print img
+        if not imagenExistenteOnClase(img, clase):
+            return False
+    return True
 
 def nomClase(nomClase):
+    '''
+    Valida que el nombre de la clase sea correcta
+    '''
     return nomClase is None 
     
 def exitenciaClase(nomClase, clases):
+    '''
+    Funcion que valida que la clase nomClase este contenida en la lista clases
+    '''
     if clases.get(nomClase) in (None, []):
         return False
     return True
-    
