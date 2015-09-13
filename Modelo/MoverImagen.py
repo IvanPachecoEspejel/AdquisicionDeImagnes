@@ -37,7 +37,7 @@ class MoverImagen(Accion):
             raise Exception(Util.getMnsjIdioma('Accion', 'Error_Imagenes_Inconsistentes'))
         
         for img in imgsAfectadas:
-            img.nomClase = claseOrigen
+            img.nomClaseCorrecto = claseOrigen
         
     def efectuarAccion(self):
         if not self.accionRealizada :

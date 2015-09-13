@@ -14,11 +14,11 @@ logger = Util.getLogger("Imagen")
 class Imagen(object):
     ''' Objeto que abstrae las caracteristicas y funcionalidades de una rutade imagen local o web '''
 
-    def __init__(self, source, nomClase = None):
+    def __init__(self, source, nomClaseCorrecto = None):
         if Valida.isImagen(source):
             self.source = source
             self.tipoRuta = Clasifica.tipoRuta(source);
-            self.nomClase = nomClase
+            self.nomClaseCorrecto = nomClaseCorrecto
         else:
             raise Exception(Util.getMnsjIdioma("Imagen", "Error_Ruta_Invalida"))
         
@@ -49,10 +49,10 @@ class Imagen(object):
     
     def __eq__(self, imagen):
         '''Regresa la comparacion entre otro objeto del mismo tipo'''
-        return self.source == imagen.source and self.nomClase == imagen.nomClase;
+        return self.source == imagen.source and self.nomClaseCorrecto == imagen.nomClaseCorrecto;
     
     def __hash__(self):
-        return hash(str(self.nomClase)+self.source)
+        return hash(str(self.nomClaseCorrecto)+self.source)
     
 if __name__ == "__main__":
     

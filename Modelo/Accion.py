@@ -44,40 +44,40 @@ class Accion(object):
             logger.info("No se agrego ninguna accion al historial, la accion no se ha efectuado")
         
     def agregarImagen(self, imagen):
-        '''Agrega una imagen al diccionario de la nomClase que trae seteada'''
+        '''Agrega una imagen al diccionario de la nomClaseCorrecto que trae seteada'''
         
-        if imagen.nomClase is None :
-            imagen.nomClase = self.nomClaseDefault     
+        if imagen.nomClaseCorrecto is None :
+            imagen.nomClaseCorrecto = self.nomClaseDefault     
         try:
-            if not Valida.imagenExistenteOnClase(imagen,self.clases[imagen.nomClase]):
-                self.clases[imagen.nomClase][imagen.__hash__()] = imagen
-                logger.info("Imagen "+imagen.source+" agregada a la clase "+imagen.nomClase)
+            if not Valida.imagenExistenteOnClase(imagen,self.clases[imagen.nomClaseCorrecto]):
+                self.clases[imagen.nomClaseCorrecto][imagen.__hash__()] = imagen
+                logger.info("Imagen "+imagen.source+" agregada a la clase "+imagen.nomClaseCorrecto)
             else:
-                logger.info("Imagen "+imagen.source+"no se puede agregar porque ya existe en esta clase "+imagen.nomClase)
+                logger.info("Imagen "+imagen.source+"no se puede agregar porque ya existe en esta clase "+imagen.nomClaseCorrecto)
         except KeyError:
-            logger.error("Clase "+imagen.nomClase+" inexistente")
+            logger.error("Clase "+imagen.nomClaseCorrecto+" inexistente")
             raise Exception(Util.getMnsjConf('Accion', 'Error_Clase_Inexistente'))
         except Exception as e:
             raise e
         
     def removerImagen(self, imagen):
-        '''Remueve una imagen de la nomClase en la que se encuentra '''
+        '''Remueve una imagen de la nomClaseCorrecto en la que se encuentra '''
         
-        if imagen.nomClase is None:
+        if imagen.nomClaseCorrecto is None:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Remover_None"))
         
         try:
-            del self.clases[imagen.nomClase][imagen.__hash__()]
-            logger.info("Imagen "+imagen.source+" removida de la clase "+imagen.nomClase)
+            del self.clases[imagen.nomClaseCorrecto][imagen.__hash__()]
+            logger.info("Imagen "+imagen.source+" removida de la clase "+imagen.nomClaseCorrecto)
         except KeyError:
-            logger.error("Clase "+imagen.nomClase+" inexistente")
+            logger.error("Clase "+imagen.nomClaseCorrecto+" inexistente")
             raise Exception(Util.getMnsjConf('Accion', 'Error_Clase_Inexistente'))
         except Exception as e:
             raise e
         
     def moverImagen(self, imagen, claseDestino):
         if imagen is not None:
-            imagen.nomClase = claseDestino
+            imagen.nomClaseCorrecto = claseDestino
         else:
             logger.error("Error la imagen es None no se puede mover")
             raise Exception(Util.getMnsjIdioma('Accion', 'Error_Imagen_None'))

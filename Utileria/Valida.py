@@ -39,11 +39,11 @@ def imagenesExistenteOnClase(imgs, clase):
             return False
     return True
 
-def nomClase(nomClase):
+def nomClaseCorrecto(nomClase):
     '''
     Valida que el nombre de la clase sea correcta
     '''
-    return nomClase is None 
+    return nomClase is not None and nomClase is not '' 
     
 def exitenciaClase(nomClase, clases):
     '''
