@@ -42,18 +42,18 @@ if __name__ == '__main__':
     agregarImgs = AgregarImagen(a)
     agregarImgs.efectuarAccion()
     print 'Clases: '
-    print Accion.clases
+    print Accion.dicClases
     print 'Pila de Acciones'
     print Accion.pilaAcciones
     print 'Clases Registrada'
-    for clase in Accion.clases:
+    for clase in Accion.dicClases:
         print clase
         
     agregarImgs.deshacerUltimaAccion()
     print 'Clases: '
-    print Accion.clases
+    print Accion.dicClases
     print 'Pila de Acciones'
     print Accion.pilaAcciones
     print 'Clases Registrada'
-    for clase in Accion.clases:
+    for clase in Accion.dicClases:
         print clase

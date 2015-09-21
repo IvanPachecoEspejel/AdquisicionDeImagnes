@@ -10,7 +10,7 @@ class Accion(object):
     nomClaseDefault = 'Clase_Default'
     claseDefault = {}
     
-    clases = {nomClaseDefault:claseDefault}
+    dicClases = {nomClaseDefault:claseDefault}
     pilaAcciones = []
     
     def __init__(self, imgsAfectadas):
@@ -49,8 +49,8 @@ class Accion(object):
         if imagen.nomClaseCorrecto is None :
             imagen.nomClaseCorrecto = self.nomClaseDefault     
         try:
-            if not Valida.imagenExistenteOnClase(imagen,self.clases[imagen.nomClaseCorrecto]):
-                self.clases[imagen.nomClaseCorrecto][imagen.__hash__()] = imagen
+            if not Valida.imagenExistenteOnClase(imagen,self.dicClases[imagen.nomClaseCorrecto]):
+                self.dicClases[imagen.nomClaseCorrecto][imagen.__hash__()] = imagen
                 logger.info("Imagen "+imagen.source+" agregada a la clase "+imagen.nomClaseCorrecto)
             else:
                 logger.info("Imagen "+imagen.source+"no se puede agregar porque ya existe en esta clase "+imagen.nomClaseCorrecto)
@@ -67,7 +67,7 @@ class Accion(object):
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Remover_None"))
         
         try:
-            del self.clases[imagen.nomClaseCorrecto][imagen.__hash__()]
+            del self.dicClases[imagen.nomClaseCorrecto][imagen.__hash__()]
             logger.info("Imagen "+imagen.source+" removida de la clase "+imagen.nomClaseCorrecto)
         except KeyError:
             logger.error("Clase "+imagen.nomClaseCorrecto+" inexistente")

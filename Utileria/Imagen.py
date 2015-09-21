@@ -20,7 +20,7 @@ class Imagen(object):
             self.tipoRuta = Clasifica.tipoRuta(source);
             self.nomClaseCorrecto = nomClaseCorrecto
         else:
-            raise Exception(Util.getMnsjIdioma("Imagen", "Error_Ruta_Invalida"))
+            raise Exception(Util.getMnsjIdioma("Imagen", "Error_Ruta_Invalida")%(source))
         
     def getPath(self):
         '''Regresa la ruta sin el arhcivo'''
@@ -58,14 +58,14 @@ if __name__ == "__main__":
     
     logger.info("Unit tests for Imagen class")
     
-    logger.info("TEST FOR PATH FROM THE WEB")
-    prueba = Imagen("http://blogs.computing.dcu.ie/wordpress/brogand2/wp-content/uploads/sites/183/2015/03/config-parser1.png")
-    print(prueba.getPath())
-    print(prueba.getNomArchivo())
-    print(prueba.getExtArchivo())
+#     logger.info("TEST FOR PATH FROM THE WEB")
+#     prueba = Imagen("http://blogs.computing.dcu.ie/wordpress/brogand2/wp-content/uploads/sites/183/2015/03/config-parser1.png")
+#     print(prueba.getPath())
+#     print(prueba.getNomArchivo())
+#     print(prueba.getExtArchivo())
     
     logger.info("TEST FOR PATH OF A FILE OF A PC")
-    prueba2 = Imagen("/home/ivan/Imagenes/fondos/02E3A832D.jpg")
+    prueba2 = Imagen("/home/ivan/Imagenes/fondos/02E3A832D.jpgr")
     print(prueba2.getPath())
     print(prueba2.getNomArchivo())
     print(prueba2.getExtArchivo())

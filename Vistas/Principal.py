@@ -1,55 +1,124 @@
 import Tkinter as tk
 from Tkinter import StringVar
 import ttk
-from  Utileria import Util
+from Utileria import Util
 from Modelo.Accion import Accion
 from Modelo.CrearClase import CrearClase
-from PIL import Image
-import ImageTk
+from Utileria.TablaRutas import TablaRutas
+from Vistas.VistaCrearClase import VistaAgregarImgURLWeb
+# from PIL import Image
+# import ImageTk
 
+########################################################################
+
+logger = Util.getLogger("Principal")
+
+########################################################################
 class Principal(tk.Frame):
-
-    logger = Util.getLogger("Principal")
-    
+    '''
+    Frame que muestra la ventana principal de la aplicacion
+    '''
+    #-------------------------------------------------------------------------------
     def __init__(self, master=None,  *args, **kw):
+        '''
+        Constructor de la vista e inicializacion de las propiedades de la ventana
+        '''
         tk.Frame.__init__(self, master, *args, **kw)
-        self.parent = master
-        self.parent.geometry('600x500+200+200')
+        self.padre = master
+        self.padre.geometry('800x500+10+10')
+        
         self.initUI()
 
+    #-------------------------------------------------------------------------------
     def initUI(self):
-        self.parent.title("Adquicicion de imagenes")
+        '''
+        Crea y empaqueta todos low widgets de la ventana
+        '''
+        self.padre.title("Adquicicion de imagenes")
         
-        lblLogo = ttk.Label(self.parent, background = "green", text="Logo")
-        lblLogo.grid(row = 0, column = 0)
+        frmNorte = ttk.Frame(self.padre)
         
-        btnAgregarImg = ttk.Button(self.parent, text="Agregar Imagen")
-        btnAgregarImg.grid(row=0, column = 1)
+        frmNorteOeste  = ttk.Frame(frmNorte)        
         
-        self.selectedClase = StringVar()
-        self.cmbClases = ttk.Combobox(self.parent, textvariable=self.selectedClase, state = 'readonly')
-        self.cmbClases['values'] = Accion.clases.keys()
+        lblLogo = ttk.Label(frmNorteOeste, background = "green", text="Logo")
+        lblLogo.pack(fill = tk.BOTH)
         
-        self.cmbClases.grid(row = 1, column = 0)
+        frmNorteOeste.grid(column = 0, row = 0)
         
-        self.nomNvaClase = StringVar()
-        ttk.Entry(self.parent, textvariable = self.nomNvaClase).grid(row = 1, column = 1)
-        
-        ttk.Button(self.parent, text = 'Crear Clase', command = self.crearClase).grid(row = 1, column = 2)
-
-        ttk.Button(self.parent, text = "Mover Todo").grid(row = 3, column= 0)
-        ttk.Button(self.parent, text = "Eliminar Todo").grid(row = 4, column = 0)
-        
-    def crearClase(self):
-        CrearClase(self.nomNvaClase.get()).efectuarAccion()
-        self.cmbClases['values'] = Accion.clases.keys()
-        self.nomNvaClase.set("")
+        frmNorteEste = ttk.Frame(frmNorte)
          
-    def agregarImagenes(self):
-        self.logger.info("Agregando imagenes")
+        btnAgregarImg = ttk.Button(frmNorteEste, 
+                                   text="Agregar Imagen", 
+                                   width = Util.getMnsjConf("VistaPrincipal", "tamBotones"))
+        btnAgregarImg.grid(column = 1, row = 0, pady = 5)
+        btnCrearClase = ttk.Button(frmNorteEste, 
+                                   text="Nueva Clase", 
+                                   width = Util.getMnsjConf("VistaPrincipal", "tamBotones"),
+                                   command = self.abrirVistaCrearClase)
+        btnCrearClase.grid(column = 1, row = 1, pady = 5)
         
+        frmNorteEste.grid(column = 1, row = 0)
+        
+        frmNorte.grid_columnconfigure(0,weight = 1)
+        frmNorte.grid_columnconfigure(1,weight = 1)
+        
+        frmNorte.pack(fill = tk.X, side=tk.TOP)
+        
+        ttk.Separator(self.padre, orient = tk.HORIZONTAL).pack()
+        
+        frmCenter = ttk.Frame(self.padre)
+        
+        frmCenterOeste = ttk.Labelframe(frmCenter, text = "Acciones sobre la tabla")
+        
+        ttk.Label(frmCenterOeste, text = "Cambia de clase: ").pack(fill = tk.Y, anchor = tk.NW)         
+        self.selectedClase = StringVar()
+        self.cmbClases = ttk.Combobox(frmCenterOeste, textvariable=self.selectedClase, state = 'readonly')
+        self.cmbClases['values'] = Accion.dicClases.keys()
+         
+        self.cmbClases.pack(fill = tk.Y, pady = 5)
+         
+        ttk.Button(frmCenterOeste, text = "Mover Todo", width = Util.getMnsjConf("VistaPrincipal", "tamBotones")).pack(fill = tk.Y, pady = 5)
+        ttk.Button(frmCenterOeste, text = "Eliminar Todo", width = Util.getMnsjConf("VistaPrincipal", "tamBotones")).pack(fill = tk.Y, pady = 5)
+        
+        ttk.Separator(frmCenterOeste, orient = tk.HORIZONTAL).pack(fill = tk.Y, expand = tk.TRUE)
+        
+        ttk.Button(frmCenterOeste, text = "Deshacer ultima Accion", width = Util.getMnsjConf("VistaPrincipal", "tamBotones")).pack(fill = tk.Y, pady = 5)
+        
+        frmCenterOeste.pack(fill = tk.BOTH, side = tk.LEFT, expand = tk.TRUE, padx = 5)
+        
+        frmCenterEste = ttk.Labelframe(frmCenter, text = "Imagenes de la clase")
+        
+        self.frame = TablaRutas(frmCenterEste)
+        self.frame.pack(fill = tk.BOTH, expand = tk.TRUE)
+        
+        frmCenterEste.pack(fill = tk.BOTH, side = tk.LEFT, expand = tk.TRUE, padx = 5)
+        
+        frmCenter.pack(fill = tk.BOTH, side = tk.TOP, expand= tk.TRUE)
+        
+        #++++++++++++++++++++++++ Ventanas Emergentes ++++++++++++++++++++++++#
+        self.frmVentanaCrearClase = VistaAgregarImgURLWeb(self.padre, self.crearClase)
+        
+    #-------------------------------------------------------------------------------        
+    def crearClase(self):
+        '''
+        Metodo que crea una clase y refresca el combobox que contiene las clases de la vista
+        '''
+        try:
+            CrearClase(self.frmVentanaCrearClase.nomNvaClase.get()).efectuarAccion()
+            self.cmbClases['values'] = Accion.dicClases.keys()
+            self.frmVentanaCrearClase.nomNvaClase.set("")
+            self.frmVentanaCrearClase.hide()
+        except Exception as ex:
+            logger.error(ex)
+        
+        
+    #-------------------------------------------------------------------------------
+    def abrirVistaCrearClase(self):
+        self.frmVentanaCrearClase.show()
+        
+
+########################################################################        
 if __name__ == '__main__':
     root = tk.Tk()
     app = Principal(master=root)
-    #root.after(30000, lambda: root.destroy())
     app.mainloop()

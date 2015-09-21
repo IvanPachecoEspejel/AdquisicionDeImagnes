@@ -26,13 +26,13 @@ class MoverImagen(Accion):
         self.agregarImgs = AgregarImagen(imgsAfectadas)
         self.accionRealizada = False
         
-        if not Valida.exitenciaClase(self.claseOrigen, Accion.clases):
+        if not Valida.exitenciaClase(self.claseOrigen, Accion.dicClases):
             self.logger.error("Clase "+claseOrigen+" inexistente")
             raise Exception(Util.getMnsjIdioma('Accion', 'Error_Crear_Clase_Existente'))
-        if not Valida.exitenciaClase(self.claseDestino, Accion.clases):
+        if not Valida.exitenciaClase(self.claseDestino, Accion.dicClases):
             self.logger.error("Clase "+claseDestino+" inexistente")
             raise Exception(Util.getMnsjIdioma('Accion', 'Error_Crear_Clase_Existente'))
-        if not Valida.imagenesExistenteOnClase(self.imgsAfectadas, Accion.clases[claseOrigen]):
+        if not Valida.imagenesExistenteOnClase(self.imgsAfectadas, Accion.dicClases[claseOrigen]):
             self.logger.error("Error imagenes incosistentes, no todas se encuentran en la clase origen: "+claseOrigen)
             raise Exception(Util.getMnsjIdioma('Accion', 'Error_Imagenes_Inconsistentes'))
         
@@ -74,11 +74,11 @@ if __name__ == '__main__':
     nvaClase = CrearClase('Clase2')
     nvaClase.efectuarAccion()
     print 'Clases: '
-    print Accion.clases
+    print Accion.dicClases
     print 'Pila de Acciones'
     print Accion.pilaAcciones
     print 'Clases Registrada'
-    for clase in Accion.clases:
+    for clase in Accion.dicClases:
         print clase
     print " "
     
@@ -86,21 +86,21 @@ if __name__ == '__main__':
     moverImagenes.efectuarAccion()
     
     print 'Clases: '
-    print Accion.clases
+    print Accion.dicClases
     print 'Pila de Acciones'
     print Accion.pilaAcciones
     print 'Clases Registrada'
-    for clase in Accion.clases:
+    for clase in Accion.dicClases:
         print clase
     print " "
         
     moverImagenes.deshacerUltimaAccion()
     
     print 'Clases: '
-    print Accion.clases
+    print Accion.dicClases
     print 'Pila de Acciones'
     print Accion.pilaAcciones
     print 'Clases Registrada'
-    for clase in Accion.clases:
+    for clase in Accion.dicClases:
         print clase
     print " "

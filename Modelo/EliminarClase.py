@@ -21,13 +21,13 @@ class EliminarClase(Accion):
     
     def efectuarAccion(self, ):
         logger.info("Eliminando la lcase: "+self.nomClase)
-        ''' Crea una clase y la agrega a la lista de clases evitando que se repita '''
+        ''' Crea una clase y la agrega a la lista de dicClases evitando que se repita '''
         if not self.accionRealizada:            
-            if not Valida.exitenciaClase(self.nomClase, self.clases):
+            if not Valida.exitenciaClase(self.nomClase, self.dicClases):
                 logger.error('No se efectuo accion, La clase: '+self.nomClase+' no existe')
                 raise Exception(Util.getMnsjIdioma('Accion', 'Error_Eliminar_Clase_Inex'))
             
-            del self.clases[self.nomClase]
+            del self.dicClases[self.nomClase]
             
             self.accionRealizada = True
             self.actualizarHistorial()
@@ -43,7 +43,7 @@ class EliminarClase(Accion):
         '''
         logger.info("Deshaciendo Accion ...")
         if self.accionRealizada:
-            self.clases[self.nomClase] = {}
+            self.dicClases[self.nomClase] = {}
             
             self.accionRealizada = False
             logger.info("Deshaciendo Accion <ok> Clase "+self.nomClase+" Creada")
@@ -53,8 +53,8 @@ class EliminarClase(Accion):
 if __name__ == '__main__':
     eliminarClase = EliminarClase(Accion.nomClaseDefault)
     eliminarClase.efectuarAccion()
-    print Accion.clases
+    print Accion.dicClases
     eliminarClase.deshacerAccion()
-    print Accion.clases
+    print Accion.dicClases
     
     

@@ -21,18 +21,18 @@ class CrearClase(Accion):
     
     def efectuarAccion(self, ):
         logger.info("Creando la lcase: "+self.nomClase+"...")
-        ''' Crea una clase y la agrega a la lista de clases evitando que se repita '''
+        ''' Crea una clase y la agrega a la lista de dicClases evitando que se repita '''
         if not self.accionRealizada:
             if not Valida.nomClaseCorrecto(self.nomClase):
                 logger.error('No se efectuo accion, Nombre de la clase invalido: '+self.nomClase)
                 raise Exception(Util.getMnsjIdioma('Accion', 'Error_Crear_Clase_Nom_None'))
             
-            if Valida.exitenciaClase(self.nomClase, self.clases):
+            if Valida.exitenciaClase(self.nomClase, self.dicClases):
                 logger.error('No se efectuo accion, La clase: '+self.nomClase+' ya esta creada')
                 raise Exception(Util.getMnsjIdioma('Accion', 'Error_Crear_Clase_Existente'))
             
             nvaClase = {}
-            self.clases[self.nomClase] = nvaClase
+            self.dicClases[self.nomClase] = nvaClase
             
             self.accionRealizada = True
             self.actualizarHistorial()
@@ -48,7 +48,7 @@ class CrearClase(Accion):
         '''
         logger.info("Deshaciendo accion...")
         if self.accionRealizada:
-            del self.clases[self.nomClase]
+            del self.dicClases[self.nomClase]
             
             self.accionRealizada = False
             logger.info("Deshaciendo accion <ok> Clase "+self.nomClase+" Eliminada")
@@ -58,13 +58,13 @@ class CrearClase(Accion):
 if __name__ == '__main__':
     crearClase = CrearClase("Clase_Preuba")
     crearClase.efectuarAccion()
-    print Accion.clases
+    print Accion.dicClases
     crearClase.deshacerUltimaAccion()
-    print Accion.clases
+    print Accion.dicClases
     crearClase.efectuarAccion()
-    print Accion.clases
+    print Accion.dicClases
     
     crearClase2 = CrearClase("")
     crearClase2.efectuarAccion()
-    print Accion.clases
+    print Accion.dicClases
     

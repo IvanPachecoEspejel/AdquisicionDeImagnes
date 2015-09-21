@@ -10,10 +10,13 @@ import Utileria.Util as Util
 from Utileria.Imagen import Imagen
 import ttk
 from PIL import Image
+from Utileria.Fila import Fila
 import ImageTk
 import re
 from Modelo.Accion import Accion
 from Modelo.AgregarImagen import AgregarImagen
+
+log = Util.getLogger("TablaRutas")
 
 class TablaRutas (ttk.Frame):
     '''
@@ -27,22 +30,23 @@ class TablaRutas (ttk.Frame):
         '''
         ttk.Frame.__init__(self, parent, *args, **kw)
         
-        #Se tiene un diccionario que tiene las mismas clases que se 
+        #Se tiene un diccionario que tiene las mismas dicClases que se 
         #tiene en la clase Accion como llaves con diferencia de que 
         #este diccionario contendra las filas ya procesadas como 
         #widgets para la tablay poder agilizar la app
-        self.clases = {} 
-        self.filterFilas = [] 
+        self.dicClases = {} 
+        self.lstFilasFiltradas = [] 
+        self.lstFilasSeleccionadas = []
         
         self.expRegBusqueda = tk.StringVar()
-        ttk.Entry(parent, textvariable=self.expRegBusqueda).pack(fill = tk.X)
+        ttk.Entry(self, textvariable=self.expRegBusqueda).pack(fill = tk.X)
 
         self.iconoBusqueda = Image.open("../Imgs/iconoBusqueda.png")
         self.iconoBusqueda.thumbnail((20,20), Image.ANTIALIAS)
         self.iconoBusqueda = ImageTk.PhotoImage(self.iconoBusqueda)
-        tk.Button(parent, image=self.iconoBusqueda, command=self.buscar).pack(fill = tk.X)
+        ttk.Button(self, image=self.iconoBusqueda, command=self.buscar).pack(fill = tk.X)
         
-        self.frame = ScrolledFrame(parent)
+        self.frame = ScrolledFrame(self)
         self.frame.pack(fill = tk.BOTH, expand = True)
             
         self.cambiarDeClase(Accion.nomClaseDefault)    
@@ -55,7 +59,7 @@ class TablaRutas (ttk.Frame):
         
         self.cargarClase(nombreClase)
         
-        self.empaquetarFilas()
+        self.empaquetarWidgetsTabla()
          
         
     def cargarClase(self, nombreClase):
@@ -66,51 +70,22 @@ class TablaRutas (ttk.Frame):
                 procesados de la clase pasada en los parametros
         '''
         
-        if self.clases.get(nombreClase) is None:
+        if self.dicClases.get(nombreClase) is None:
             
-            clase = Accion.clases.get(nombreClase)
+            clase = Accion.dicClases.get(nombreClase)
             self.filas = []
             
             for img in clase.values():
-                self.filas.append(Fila(img, self.frame.interior))
+                self.filas.append(Fila(img, self))
                 
-            self.clases[nombreClase] = self.filas
+            self.dicClases[nombreClase] = self.filas
                 
         else:
-            self.filas = self.clases.get(nombreClase)
-        
-        self.limpiarRegistroFiltro() 
-        for img in self.filas : self.filterFilas.append(img)
+            self.filas = self.dicClases.get(nombreClase)
             
-    
-    def empaquetarFilas(self):
-        '''
-        Agrega todas los widgets de los objetos fila que se encuentran en la lista filterFilas
-        al frame de la tabla
-        '''
-        self.limpiarTabla()
-        
-        i = 1
-        for fila in self.filterFilas:
-            fila.lblRuta.grid(column = 0, row = i)
-            fila.lblImg.grid(column = 1, row = i)
-            i = i+1
-            
-    def limpiarTabla(self):
-        '''
-        Elimina todos los widgets del frame
-        '''
-        for a in self.frame.interior.winfo_children(): a.grid_forget()
-        
-        cabezera = Util.getMnsjConf("TablaRutas", "cabezera").split(",")
-        for i in range(len(cabezera)):
-            ttk.Label(self.frame.interior, text = cabezera[i]).grid(row = 0, column = i, sticky = tk.W+tk.E, padx = 10)
-        
-    def limpiarRegistroFiltro(self):
-        '''
-        Limpia la lista de filas que se utiliza para realizar la busqueda
-        '''
-        while len(self.filterFilas) > 0 : del self.filterFilas[0]
+        self.limpiarLstFilasSeleccionadas()
+        self.limpiarLstFilasFiltradas() 
+        for img in self.filas : self.lstFilasFiltradas.append(img)
         
     def buscar(self):
         '''
@@ -121,39 +96,112 @@ class TablaRutas (ttk.Frame):
         if self.expRegBusqueda.get() is None :
             raise Exception(Util.getMnsjIdioma("TablaRutas", "Error_Exp_Reg_None"))
         
-        self.limpiarRegistroFiltro()
+        self.limpiarLstFilasSeleccionadas()
+        self.limpiarLstFilasFiltradas()
         
         try:
             for fila in self.filas:
                 if(re.search(self.expRegBusqueda.get(),fila.img.source) is not None):
-                    self.filterFilas.append(fila)
+                    self.lstFilasFiltradas.append(fila)
         except Exception:
             raise Exception(Util.getMnsjIdioma("TablaRutas", "Error_Exp_Reg_Inv"))
                 
-        self.empaquetarFilas()
-        
-class Fila(object):
-    '''
-    Cada instancia tiene dos objetos widgets que representan columnas en la tabla
-    uno para mostrar la url de la imagen y otro para previsualizar la imagen
-    '''
+        self.empaquetarWidgetsTabla()
+            
     
-    def __init__(self, imagen, tabla):
+    def empaquetarWidgetsTabla(self):
         '''
-        Crea los widgets correspondientes a imagen que estaran contenidos en tabla que 
-        se pasa como parametro
+        Agrega todas los widgets de los objetos fila que se encuentran en la lista lstFilasFiltradas
+        al frame de la tabla y tambien crea los widgets y los empequeta de la cabezera
         '''
-        self.lblRuta = tk.Text(tabla,height=int(Util.getMnsjConf("TablaRutas", "altoCeldaRuta")))
+        self.limpiarTabla()
         
-        self.lblRuta.insert(1.0, imagen.source)
-        self.iconoImg = Image.open(imagen.source)
-        self.iconoImg.thumbnail((
-                int(Util.getMnsjConf("TablaRutas", "altoImgMuestra")),
-                int(Util.getMnsjConf("TablaRutas", "anchoImgMuestra"))
-                ), Image.ANTIALIAS)
-        self.iconoImg = ImageTk.PhotoImage(self.iconoImg)
-        self.lblImg = ttk.Label(tabla, image = self.iconoImg)
-        self.img = imagen
+        self.empaquetarCabezeraTabla()
+        
+        i = 1
+        for fila in self.lstFilasFiltradas:
+            fila.empaquetar(i)
+            i = i+1
+            
+    def empaquetarCabezeraTabla(self):
+        '''
+        Crea los widgets de la cabezera de la tabla y los empaqueta en ella
+        '''
+        cabezera = Util.getMnsjConf("TablaRutas", "cabezera").split(",")
+        self.strVarEstanSelecTodos = tk.StringVar()
+        self.strVarEstanSelecTodos.set('0')
+        ttk.Checkbutton(self.frame.interior, 
+                        variable = self.strVarEstanSelecTodos, 
+                        command = self.seleccionarDeseleccionarTodo,).grid(row = 0, 
+                                                                           column = 0,
+                                                                           padx = 5)
+        
+        for i in range(len(cabezera)):
+            ttk.Label(self.frame.interior, 
+                      text = cabezera[i]).grid(row = 0, 
+                                                 column = i+1,
+                                                 padx = 5)
+        
+        self.frame.interior.grid_columnconfigure(0, weight = 1)    
+        self.frame.interior.grid_columnconfigure(1, weight = 2)
+        self.frame.interior.grid_columnconfigure(2, weight = 1)
+
+    def limpiarTabla(self):
+        '''
+        Elimina todos los widgets del frame
+        '''
+        for a in self.frame.interior.winfo_children(): a.grid_forget()
+        
+    def limpiarLstFilasFiltradas(self):
+        '''
+        Limpia la lista de filas que se utiliza para realizar la busqueda
+        '''
+        while len(self.lstFilasFiltradas) > 0 : del self.lstFilasFiltradas[0]
+        
+    def limpiarLstFilasSeleccionadas(self):
+        '''
+        Limpia la lista de imagenes que hayan sido seleccionadas
+        '''
+        while len(self.lstFilasSeleccionadas) > 0 :
+            self.lstFilasSeleccionadas[0].strVarEstaSelecccionado.set('0')
+            del self.lstFilasSeleccionadas[0]
+            
+    def seleccionarDeseleccionarTodo(self):
+        '''
+        Verifica si el checkBox que se utiliza para seleccionar todos esta seleccionado
+        y dependiendo de su estado efectua cierta tarea
+        '''
+        self.limpiarLstFilasSeleccionadas()
+        if self.strVarEstanSelecTodos.get() == '0':
+            for fila in self.lstFilasFiltradas: fila.strVarEstaSelecccionado.set('0')
+            log.info("Todas las filas deseleccionadas")
+        elif self.strVarEstanSelecTodos.get() == '1':
+            for fila in self.lstFilasFiltradas:
+                self.lstFilasSeleccionadas.append(fila) 
+                fila.strVarEstaSelecccionado.set('1')
+                
+            log.info("Todas las filas seleccionadas")
+        else:
+            log.error("Seleccionar todos, Valor desconocido "+self.strVarEstanSelecTodos.get())
+            
+    
+    def seleccionarFila(self, fila):
+        '''
+        Agrea el objeto fila de los parametros a la lista lstFilasSeleccionadas
+        '''
+        self.lstFilasSeleccionadas.append(fila)
+        log.info("Fila "+fila.img.source+" seleccionada")
+    
+    def desseleccionarFila(self, fila):
+        '''
+        Trata de eliminar el objeto fila de los parametros de la lista lstFilasSeleccionadas
+        '''
+        try:
+            self.lstFilasSeleccionadas.remove(fila)
+            log.info("Fila "+fila.img.source+" deseleccionada")
+        except ValueError:
+            log.error("Error interno al seleccionar fila no previamente seleccionada: "+fila.img.source)
+        
     
 if __name__ == "__main__":
     
@@ -168,7 +216,7 @@ if __name__ == "__main__":
     img1 = Imagen("/home/ivan/Imagenes/fondos/02E3A832D.jpg")
     img2 = Imagen("/home/ivan/Imagenes/fondos/1_rajathilaknatarajan-redsky.jpg")
     a = (img1, img2)
-     
+      
     agregarImgs = AgregarImagen(a)
     agregarImgs.efectuarAccion()
         
