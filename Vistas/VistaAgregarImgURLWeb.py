@@ -20,6 +20,7 @@ class VistaAgregarImgURLWeb(tk.Toplevel):
         '''
         tk.Toplevel.__init__(self, master)
         self.padre = master
+        self.attributes('-topmost', tk.TRUE)
         self.comandoAgregarImg = comando
         self.title("URL WEB")
         self.initUI()
@@ -89,7 +90,7 @@ if __name__ == "__main__":
         def __init__(self,*args, **kwargs):
             root = tk.Tk.__init__(self, *args, **kwargs)
 
-            self.frame = VistaAgregarImgURLWeb(root)
+            self.frmTabla = VistaAgregarImgURLWeb(root)
             
         
     app = SampleApp()

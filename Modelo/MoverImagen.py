@@ -11,19 +11,18 @@ from AgregarImagen import AgregarImagen
 from CrearClase import CrearClase
 from Utileria.Imagen import Imagen
 
+####################################################################################
+logger = Util.getLogger("MoverImagen")
+####################################################################################
 class MoverImagen(Accion):
     '''
     Objeto que abstrae los atributos y funcionalidades de la accion mover
     '''
-    
-    logger = Util.getLogger("MoverImagen")
-    
+    #----------------------------------------------------------------------------------
     def __init__(self, imgsAfectadas, claseOrigen, claseDestino):
         self.imgsAfectadas = imgsAfectadas
         self.claseOrigen = claseOrigen
         self.claseDestino = claseDestino
-        self.removerImgs = EliminarImagen(imgsAfectadas)
-        self.agregarImgs = AgregarImagen(imgsAfectadas)
         self.accionRealizada = False
         
         if not Valida.exitenciaClase(self.claseOrigen, Accion.dicClases):
@@ -39,19 +38,26 @@ class MoverImagen(Accion):
         for img in imgsAfectadas:
             img.nomClaseCorrecto = claseOrigen
         
+        self.removerImgs = EliminarImagen(imgsAfectadas)
+        self.agregarImgs = AgregarImagen(imgsAfectadas)
+    
+    #----------------------------------------------------------------------------------    
     def efectuarAccion(self):
         if not self.accionRealizada :
             
             self.removerImgs.efectuarAccion()
+            
             for img in self.imgsAfectadas:
                 self.moverImagen(img, self.claseDestino)
+                
             self.agregarImgs.efectuarAccion()
             
             self.accionRealizada = True
             self.actualizarHistorial()
         else:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Hacer_Accion"))
-        
+    
+    #----------------------------------------------------------------------------------        
     def deshacerAccion(self):
         if self.accionRealizada:
             # Se deshace la accion de agregar imagenes de la clase Destino
@@ -63,7 +69,7 @@ class MoverImagen(Accion):
             self.deshacerUltimaAccion()
         else:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Deshacer_Accion"))
-
+####################################################################################
 if __name__ == '__main__':
     img1 = Imagen("/home/ivan/Imagenes/fondos/02E3A832D.jpg")
     img2 = Imagen("/home/ivan/Imagenes/fondos/1_rajathilaknatarajan-redsky.jpg")

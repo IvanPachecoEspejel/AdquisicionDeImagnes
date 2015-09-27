@@ -20,6 +20,7 @@ class VistaAgregarImgURLWeb(tk.Toplevel):
         '''
         tk.Toplevel.__init__(self, master)
         self.padre = master
+        self.attributes('-topmost', tk.TRUE)
         self.title("Creacion de una clase")
         self.comandoCrearClase = crearClase
         self.initUI()
@@ -39,8 +40,8 @@ class VistaAgregarImgURLWeb(tk.Toplevel):
         frmClases = ttk.Labelframe(self,text = "Cracion de una clase")
         
         ttk.Label(frmClases, text = 'Nombre de la nueva clase: ').grid(row = 0, column = 0, pady = 10)
-        self.nomNvaClase = tk.StringVar()
-        ttk.Entry(frmClases, textvariable = self.nomNvaClase).grid(row = 0, column = 1, pady = 10)
+        self.strVarNomNvaClase = tk.StringVar()
+        ttk.Entry(frmClases, textvariable = self.strVarNomNvaClase).grid(row = 0, column = 1, pady = 10)
         
         frmSur = ttk.Frame(frmClases)
         
@@ -86,7 +87,7 @@ if __name__ == "__main__":
         def __init__(self,*args, **kwargs):
             root = tk.Tk.__init__(self, *args, **kwargs)
 
-            self.frame = VistaAgregarImgURLWeb(root,self.crearClase)
+            self.frmTabla = VistaAgregarImgURLWeb(root,self.crearClase)
             
         
     app = SampleApp()

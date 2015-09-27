@@ -19,11 +19,11 @@ class MyApp(object):
     def __init__(self, parent):
         """Constructor"""
         self.root = parent
-        self.root.title("Main frame")
-        self.frame = Tk.Frame(parent)
-        self.frame.pack()
+        self.root.title("Main frmTabla")
+        self.frmTabla = Tk.Frame(parent)
+        self.frmTabla.pack()
  
-        btn = Tk.Button(self.frame, text="Open Frame", command=self.openFrame)
+        btn = Tk.Button(self.frmTabla, text="Open Frame", command=self.openFrame)
         btn.pack()
  
     #----------------------------------------------------------------------

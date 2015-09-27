@@ -20,8 +20,8 @@ class CrearClase(Accion):
         self.accionRealizada = False
     
     def efectuarAccion(self, ):
-        logger.info("Creando la lcase: "+self.nomClase+"...")
         ''' Crea una clase y la agrega a la lista de dicClases evitando que se repita '''
+        logger.info("Creando la lcase: "+self.nomClase+"...")
         if not self.accionRealizada:
             if not Valida.nomClaseCorrecto(self.nomClase):
                 logger.error('No se efectuo accion, Nombre de la clase invalido: '+self.nomClase)
@@ -39,6 +39,7 @@ class CrearClase(Accion):
             logger.info("Clase creada :"+self.nomClase+" <ok>")
         else:
             raise Exception(Util.getMnsjIdioma("Accion", "Error_Hacer_Accion"))
+        print Accion.dicClases
     
     def deshacerAccion(self):
         ''' 

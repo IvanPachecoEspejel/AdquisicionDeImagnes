@@ -12,6 +12,10 @@ class EliminarImagen(Accion):
     '''
     Objeto que abstrae las caracteristicas de una accion de elimiar imagenes
     '''
+    
+    def __init__(self, imgsAfectadas):
+        self.imgsAfectadas=imgsAfectadas
+        self.accionRealizada = False
         
     def efectuarAccion(self):
         if not self.accionRealizada:

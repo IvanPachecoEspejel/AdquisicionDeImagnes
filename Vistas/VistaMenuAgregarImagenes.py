@@ -11,6 +11,7 @@ from Utileria import Util
 from Utileria.Imagen import Imagen
 from Modelo.AgregarImagen import AgregarImagen
 from Vistas.VistaAgregarImgURLWeb import VistaAgregarImgURLWeb
+from Modelo.Accion import Accion
 import os
 
 logger = Util.getLogger("VistaMenuAgregarImagenes")
@@ -23,19 +24,21 @@ class VistaMenuAgregarImagenes(tk.Toplevel):
     '''
     
     #----------------------------------------------------------------------
-    def __init__(self, master = None):
+    def __init__(self, master, frmTabla):
         '''
         Constructor
         '''
         tk.Toplevel.__init__(self, master)
         self.padre = master
+        self.attributes('-topmost', tk.TRUE)
+        self.frmTabla = frmTabla
         self.title("Agregar Imagenes")
         
         #Opciones para el dialogo de imagenes para abrir una sola imagen de tkinter
         self.optDialogoImg = opciones = {}
         opciones['defaultextension'] = '.jpg'
         opciones['filetypes'] = [('Imagenes', Util.getMnsjConf("Validacion", "Extenciones"))]
-#         opciones['initialdir'] = '/home/ivan/Escritorio/'
+        opciones['initialdir'] = '/home/ivan/'
         opciones['parent'] = self
         opciones['title'] = 'Escoge imagenes'
         
@@ -54,6 +57,7 @@ class VistaMenuAgregarImagenes(tk.Toplevel):
         opciones['title'] = 'Escoge un directorio con imagenes'
         
         self.initUI()
+        self.hide()
         
     #----------------------------------------------------------------------
     def initUI(self):
@@ -123,16 +127,17 @@ class VistaMenuAgregarImagenes(tk.Toplevel):
         if dirImg is None or dirImg == "":
             return
         
-        nvaImg = Imagen(dirImg)
+        nvaImg = Imagen(dirImg, self.frmTabla)
         a = []
         a.append(nvaImg)
         AgregarImagen(a).efectuarAccion()
+        self.padre.actualizarClase(Accion.nomClaseDefault)
     
     #----------------------------------------------------------------------
     def agregarImagenWEB(self):
         try:
             dirImg = self.frmVistaAgrImgURLWeb.nomNvaImg.get()
-            nvaImg = Imagen(dirImg)
+            nvaImg = Imagen(dirImg, self.frmTabla)
             a = []
             a.append(nvaImg)
             AgregarImagen(a).efectuarAccion()
@@ -140,6 +145,7 @@ class VistaMenuAgregarImagenes(tk.Toplevel):
             self.frmVistaAgrImgURLWeb.hide()
         except Exception as ex:
             logger.error(ex)
+        self.padre.actualizarClase(Accion.nomClaseDefault)
             
     #----------------------------------------------------------------------    
     def agregarImagenesArchivo(self):
@@ -152,25 +158,29 @@ class VistaMenuAgregarImagenes(tk.Toplevel):
         a = []
         while linea != "":
             try:
-                nvaImg = Imagen(linea.strip())
+                nvaImg = Imagen(linea.strip(), self.frmTabla)
                 a.append(nvaImg)
             except Exception as ex:
                 logger.error(ex)
             linea = archivo.readline()
         AgregarImagen(a).efectuarAccion()
+        self.padre.actualizarClase(Accion.nomClaseDefault)
         
     #----------------------------------------------------------------------    
     def agregarImagenesDeDirectorio(self):
         directorio = tkFileDialog.askdirectory(**self.optDialogoDir)
+        if directorio is None or directorio == "":
+            return
         ficheros = os.listdir(directorio)
         a = []
         for fichero in ficheros:
             try:
-                nvaImg = Imagen(directorio+os.path.sep+fichero)
+                nvaImg = Imagen(directorio+os.path.sep+fichero, self.frmTabla)
                 a.append(nvaImg)
             except Exception as ex:
                 logger.error(ex)
         AgregarImagen(a).efectuarAccion()
+        self.padre.actualizarClase(Accion.nomClaseDefault)
         
 #########################################################################################
         
@@ -181,7 +191,7 @@ if __name__ == "__main__":
         def __init__(self,*args, **kwargs):
             root = tk.Tk.__init__(self, *args, **kwargs)
 
-            self.frame = VistaMenuAgregarImagenes(root)
+            self.frmTabla = VistaMenuAgregarImagenes(root)
             
         
     app = SampleApp()

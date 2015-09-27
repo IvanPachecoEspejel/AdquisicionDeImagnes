@@ -6,6 +6,12 @@ from Modelo.Accion import Accion
 from Modelo.CrearClase import CrearClase
 from Utileria.TablaRutas import TablaRutas
 from Vistas.VistaCrearClase import VistaAgregarImgURLWeb
+from Vistas.VistaMenuAgregarImagenes import VistaMenuAgregarImagenes
+from Vistas.VistaMoverSeleccionados import VistaMoverSeleccionados
+from Modelo.EliminarImagen import EliminarImagen
+from Modelo.AgregarImagen import AgregarImagen
+from Modelo.EliminarClase import EliminarClase
+from Modelo.MoverImagen import MoverImagen
 # from PIL import Image
 # import ImageTk
 
@@ -25,7 +31,7 @@ class Principal(tk.Frame):
         '''
         tk.Frame.__init__(self, master, *args, **kw)
         self.padre = master
-        self.padre.geometry('800x500+10+10')
+        self.padre.geometry('1000x500+10+10')
         
         self.initUI()
 
@@ -35,6 +41,14 @@ class Principal(tk.Frame):
         Crea y empaqueta todos low widgets de la ventana
         '''
         self.padre.title("Adquicicion de imagenes")
+        
+        frmHeader = ttk.Frame(self.padre, relief = tk.RAISED)
+        mbMenu=  ttk.Menubutton(frmHeader, text="Archivo")
+        mbMenu.menu = tk.Menu(mbMenu)
+        mbMenu["menu"] = mbMenu.menu
+        mbMenu.menu.add_command(label = "Guardar2")
+        mbMenu.pack(side = tk.LEFT)
+        frmHeader.pack(side = tk.TOP, fill = tk.X, expand = tk.TRUE)
         
         frmNorte = ttk.Frame(self.padre)
         
@@ -49,7 +63,8 @@ class Principal(tk.Frame):
          
         btnAgregarImg = ttk.Button(frmNorteEste, 
                                    text="Agregar Imagen", 
-                                   width = Util.getMnsjConf("VistaPrincipal", "tamBotones"))
+                                   width = Util.getMnsjConf("VistaPrincipal", "tamBotones"),
+                                   command = self.abrirVistaMenuAgrImgs)
         btnAgregarImg.grid(column = 1, row = 0, pady = 5)
         btnCrearClase = ttk.Button(frmNorteEste, 
                                    text="Nueva Clase", 
@@ -72,31 +87,47 @@ class Principal(tk.Frame):
         
         ttk.Label(frmCenterOeste, text = "Cambia de clase: ").pack(fill = tk.Y, anchor = tk.NW)         
         self.selectedClase = StringVar()
-        self.cmbClases = ttk.Combobox(frmCenterOeste, textvariable=self.selectedClase, state = 'readonly')
+        self.selectedClase.set(Accion.nomClaseDefault)
+        self.cmbClases = ttk.Combobox(frmCenterOeste, 
+                                      textvariable=self.selectedClase, 
+                                      state = 'readonly')
         self.cmbClases['values'] = Accion.dicClases.keys()
          
         self.cmbClases.pack(fill = tk.Y, pady = 5)
+        self.cmbClases.bind("<<ComboboxSelected>>", self.cambiarClase)
          
-        ttk.Button(frmCenterOeste, text = "Mover Todo", width = Util.getMnsjConf("VistaPrincipal", "tamBotones")).pack(fill = tk.Y, pady = 5)
-        ttk.Button(frmCenterOeste, text = "Eliminar Todo", width = Util.getMnsjConf("VistaPrincipal", "tamBotones")).pack(fill = tk.Y, pady = 5)
+        ttk.Button(frmCenterOeste, 
+                   text = "Mover Todo", 
+                   width = Util.getMnsjConf("VistaPrincipal", "tamBotones"),
+                   command = self.abrirVistaMoverImgs).pack(fill = tk.Y, pady = 5)
+        
+        ttk.Button(frmCenterOeste, 
+                   text = "Eliminar Todo", 
+                   width = Util.getMnsjConf("VistaPrincipal", "tamBotones"),
+                   command = self.eliminarImagenes).pack(fill = tk.Y, pady = 5)
         
         ttk.Separator(frmCenterOeste, orient = tk.HORIZONTAL).pack(fill = tk.Y, expand = tk.TRUE)
         
-        ttk.Button(frmCenterOeste, text = "Deshacer ultima Accion", width = Util.getMnsjConf("VistaPrincipal", "tamBotones")).pack(fill = tk.Y, pady = 5)
+        ttk.Button(frmCenterOeste, 
+                   text = "Deshacer ultima Accion", 
+                   width = Util.getMnsjConf("VistaPrincipal", "tamBotones"),
+                   command = self.deshacerAccion).pack(fill = tk.Y, pady = 5)
         
         frmCenterOeste.pack(fill = tk.BOTH, side = tk.LEFT, expand = tk.TRUE, padx = 5)
         
         frmCenterEste = ttk.Labelframe(frmCenter, text = "Imagenes de la clase")
         
-        self.frame = TablaRutas(frmCenterEste)
-        self.frame.pack(fill = tk.BOTH, expand = tk.TRUE)
+        self.frmTabla = TablaRutas(frmCenterEste)
+        self.frmTabla.pack(fill = tk.BOTH, expand = tk.TRUE)
         
         frmCenterEste.pack(fill = tk.BOTH, side = tk.LEFT, expand = tk.TRUE, padx = 5)
         
         frmCenter.pack(fill = tk.BOTH, side = tk.TOP, expand= tk.TRUE)
         
         #++++++++++++++++++++++++ Ventanas Emergentes ++++++++++++++++++++++++#
-        self.frmVentanaCrearClase = VistaAgregarImgURLWeb(self.padre, self.crearClase)
+        self.frmVentanaCrearClase = VistaAgregarImgURLWeb(self, self.crearClase)
+        self.frmVentanaMenuAgrImgs = VistaMenuAgregarImagenes(self, self.frmTabla)
+        self.frmVentanaMoverImgs = VistaMoverSeleccionados(self, self.selectedClase, self.frmTabla.lstImgsSeleccionadas)
         
     #-------------------------------------------------------------------------------        
     def crearClase(self):
@@ -104,18 +135,70 @@ class Principal(tk.Frame):
         Metodo que crea una clase y refresca el combobox que contiene las clases de la vista
         '''
         try:
-            CrearClase(self.frmVentanaCrearClase.nomNvaClase.get()).efectuarAccion()
-            self.cmbClases['values'] = Accion.dicClases.keys()
-            self.frmVentanaCrearClase.nomNvaClase.set("")
+            CrearClase(self.frmVentanaCrearClase.strVarNomNvaClase.get()).efectuarAccion()
+            self.frmVentanaCrearClase.strVarNomNvaClase.set("")
             self.frmVentanaCrearClase.hide()
+            self.actualizarCmbClases()
         except Exception as ex:
             logger.error(ex)
-        
         
     #-------------------------------------------------------------------------------
     def abrirVistaCrearClase(self):
         self.frmVentanaCrearClase.show()
+    
+    #-------------------------------------------------------------------------------
+    def abrirVistaMenuAgrImgs(self):
+        self.frmVentanaMenuAgrImgs.show()
+    
+    #-------------------------------------------------------------------------------
+    def abrirVistaMoverImgs(self):
+        self.frmVentanaMoverImgs.show()
         
+    #-------------------------------------------------------------------------------
+    def cambiarClase(self, event):
+        logger.info("Cambiando de clase a : "+self.selectedClase.get())
+        if self.selectedClase.get() is not None and self.selectedClase.get() != "":
+            self.actualizarClase(self.selectedClase.get())
+    
+    #-------------------------------------------------------------------------------
+    def actualizarCmbClases(self):
+        self.cmbClases['values'] = Accion.dicClases.keys()
+    
+    #-------------------------------------------------------------------------------
+    def actualizarClase(self, nomClase):
+        self.frmTabla.cambiarDeClase(nomClase)
+        self.frmTabla.frmTabla.canvas.update()
+        self.frmTabla.frmTabla.canvas.update_idletasks()
+        self.frmTabla.frmTabla.interior.update_idletasks()
+        self.frmTabla.frmTabla.interior.update()
+        self.selectedClase.set(nomClase)
+        
+    #-------------------------------------------------------------------------------
+    def eliminarImagenes(self):
+        lstAuxImgs = []
+        lstAuxImgs.extend(self.frmTabla.lstImgsSeleccionadas)
+        accion = EliminarImagen(lstAuxImgs)
+        accion.efectuarAccion()
+        self.actualizarClase(self.selectedClase.get())
+        
+    #-------------------------------------------------------------------------------
+    def deshacerAccion(self):
+        accionDeshecha = Accion().deshacerUltimaAccion()
+        
+        if accionDeshecha is None:
+            logger.info("No hay mas acciones por deshacer")
+        elif accionDeshecha.__class__ == AgregarImagen:
+            self.actualizarClase(Accion.nomClaseDefault)
+        elif accionDeshecha.__class__ == EliminarImagen:
+            self.actualizarClase(accionDeshecha.imgsAfectadas[0].nomClaseCorrecto)
+        elif accionDeshecha.__class__ == CrearClase or accionDeshecha.__class__ == EliminarClase:
+            self.actualizarCmbClases()
+        elif accionDeshecha.__class__ == MoverImagen:
+            self.actualizarClase(accionDeshecha.claseOrigen)
+        else:
+            logger.error("Error no se encontro el tipo de accion que se desizo")
+        
+    
 
 ########################################################################        
 if __name__ == '__main__':
