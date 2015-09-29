@@ -181,7 +181,10 @@ class VistaMenuAgregarImagenes(tk.Toplevel):
                 logger.error(ex)
         AgregarImagen(a).efectuarAccion()
         self.padre.actualizarClase(Accion.nomClaseDefault)
-        
+    
+    #----------------------------------------------------------------------    
+    def actualizar(self):
+        self.frmTabla.actualizar()
 #########################################################################################
         
 if __name__ == "__main__":

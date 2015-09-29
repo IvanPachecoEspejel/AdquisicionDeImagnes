@@ -9,7 +9,7 @@ import Tkinter as tk
 
 #########################################################################################
 
-class VistaAgregarImgURLWeb(tk.Toplevel):
+class VistaCrearClase(tk.Toplevel):
     '''
     Ventana en la que se ofrece la posibilidad de crear una clase
     '''
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         def __init__(self,*args, **kwargs):
             root = tk.Tk.__init__(self, *args, **kwargs)
 
-            self.frmTabla = VistaAgregarImgURLWeb(root,self.crearClase)
+            self.frmTabla = VistaCrearClase(root,self.crearClase)
             
         
     app = SampleApp()

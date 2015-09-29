@@ -30,7 +30,7 @@ class TablaRutas (ttk.Frame):
     #-----------------------------------------------------------------------
     def __init__(self,  parent, *args, **kw):
         '''
-        Inicializa un frmTabla con scroll y crea la cabezera de la tabla
+        Inicializa un frmScrollPane con scroll y crea la cabezera de la tabla
         '''
         ttk.Frame.__init__(self, parent, *args, **kw)
         
@@ -45,8 +45,8 @@ class TablaRutas (ttk.Frame):
         self.iconoBusqueda = ImageTk.PhotoImage(self.iconoBusqueda)
         ttk.Button(self, image=self.iconoBusqueda, command=self.buscar).pack(fill = tk.X)
         
-        self.frmTabla = ScrolledFrame(self)
-        self.frmTabla.pack(fill = tk.BOTH, expand = True)
+        self.frmScrollPane = ScrolledFrame(self)
+        self.frmScrollPane.pack(fill = tk.BOTH, expand = True)
             
         self.cambiarDeClase(Accion.nomClaseDefault)    
     
@@ -103,7 +103,7 @@ class TablaRutas (ttk.Frame):
     def empaquetarWidgetsTabla(self):
         '''
         Agrega todas los widgets de los objetos fila que se encuentran en la lista lstFilasFiltradas
-        al frmTabla de la tabla y tambien crea los widgets y los empequeta de la cabezera
+        al frmScrollPane de la tabla y tambien crea los widgets y los empequeta de la cabezera
         '''
         self.limpiarTabla()
         
@@ -124,28 +124,28 @@ class TablaRutas (ttk.Frame):
         cabezera = Util.getMnsjConf("TablaRutas", "cabezera").split(",")
         self.strVarEstanSelecTodos = tk.StringVar()
         self.strVarEstanSelecTodos.set('0')
-        ttk.Checkbutton(self.frmTabla.interior, 
+        ttk.Checkbutton(self.frmScrollPane.interior, 
                         variable = self.strVarEstanSelecTodos, 
                         command = self.seleccionarDeseleccionarTodo,).grid(row = 0, 
                                                                            column = 0,
                                                                            padx = 5)
         
         for i in range(len(cabezera)):
-            ttk.Label(self.frmTabla.interior, 
+            ttk.Label(self.frmScrollPane.interior, 
                       text = cabezera[i]).grid(row = 0, 
                                                  column = i+1,
                                                  padx = 5)
         
-        self.frmTabla.interior.grid_columnconfigure(0, weight = 1)    
-        self.frmTabla.interior.grid_columnconfigure(1, weight = 2)
-        self.frmTabla.interior.grid_columnconfigure(2, weight = 1)
+        self.frmScrollPane.interior.grid_columnconfigure(0, weight = 1)    
+        self.frmScrollPane.interior.grid_columnconfigure(1, weight = 2)
+        self.frmScrollPane.interior.grid_columnconfigure(2, weight = 1)
 
     #-----------------------------------------------------------------------
     def limpiarTabla(self):
         '''
-        Elimina todos los widgets del frmTabla
+        Elimina todos los widgets del frmScrollPane
         '''
-        for a in self.frmTabla.interior.winfo_children(): a.grid_forget()
+        for a in self.frmScrollPane.interior.winfo_children(): a.grid_forget()
         
         self.update()
     
@@ -203,10 +203,13 @@ class TablaRutas (ttk.Frame):
         except ValueError:
             log.error("Error interno al seleccionar fila no previamente seleccionada: "+img.source)
     
+
     #-----------------------------------------------------------------------
-    def agregarImagen(self, nombreClase, img):
-        filas = self.dicClases[nombreClase]
-        filas.append(Fila(img, self))
+    def actualizarTabla(self):
+        '''
+        Actualiza los widgest mas importantes de la tabla
+        '''
+        self.frmScrollPane.acutalizarScrollPane()
 
 #######################################################################    
 if __name__ == "__main__":

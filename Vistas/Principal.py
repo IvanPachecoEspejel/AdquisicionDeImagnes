@@ -5,13 +5,15 @@ from Utileria import Util
 from Modelo.Accion import Accion
 from Modelo.CrearClase import CrearClase
 from Utileria.TablaRutas import TablaRutas
-from Vistas.VistaCrearClase import VistaAgregarImgURLWeb
+from Vistas.VistaCrearClase import VistaCrearClase
 from Vistas.VistaMenuAgregarImagenes import VistaMenuAgregarImagenes
 from Vistas.VistaMoverSeleccionados import VistaMoverSeleccionados
+from Vistas.VistaGuardarDirectorioImgs import VistaGuardarDirectorioImgs
 from Modelo.EliminarImagen import EliminarImagen
 from Modelo.AgregarImagen import AgregarImagen
 from Modelo.EliminarClase import EliminarClase
 from Modelo.MoverImagen import MoverImagen
+import tkFileDialog
 # from PIL import Image
 # import ImageTk
 
@@ -46,7 +48,8 @@ class Principal(tk.Frame):
         mbMenu=  ttk.Menubutton(frmHeader, text="Archivo")
         mbMenu.menu = tk.Menu(mbMenu)
         mbMenu["menu"] = mbMenu.menu
-        mbMenu.menu.add_command(label = "Guardar2")
+        mbMenu.menu.add_command(label = "Generar Archivo De Direcciones", command = self.abrirGenerarArchivoDeDirecciones)
+        mbMenu.menu.add_command(label = "Generar Directorio de Imagenes", command = self.abrirVistaGuardarDirectorioImgs)
         mbMenu.pack(side = tk.LEFT)
         frmHeader.pack(side = tk.TOP, fill = tk.X, expand = tk.TRUE)
         
@@ -125,9 +128,10 @@ class Principal(tk.Frame):
         frmCenter.pack(fill = tk.BOTH, side = tk.TOP, expand= tk.TRUE)
         
         #++++++++++++++++++++++++ Ventanas Emergentes ++++++++++++++++++++++++#
-        self.frmVentanaCrearClase = VistaAgregarImgURLWeb(self, self.crearClase)
+        self.frmVentanaCrearClase = VistaCrearClase(self, self.crearClase)
         self.frmVentanaMenuAgrImgs = VistaMenuAgregarImagenes(self, self.frmTabla)
         self.frmVentanaMoverImgs = VistaMoverSeleccionados(self, self.selectedClase, self.frmTabla.lstImgsSeleccionadas)
+        self.frmVentanaGuaDirImgs  = VistaGuardarDirectorioImgs(self)
         
     #-------------------------------------------------------------------------------        
     def crearClase(self):
@@ -155,6 +159,15 @@ class Principal(tk.Frame):
         self.frmVentanaMoverImgs.show()
         
     #-------------------------------------------------------------------------------
+    def abrirVistaGuardarDirectorioImgs(self):
+        self.frmVentanaGuaDirImgs.show()
+    
+    #-------------------------------------------------------------------------------
+    def abrirGenerarArchivoDeDirecciones(self):
+        f = tkFileDialog.asksaveasfilename(defaultextension=".txt")
+        Accion().generarArchivoDeDirecciones(f)
+        
+    #-------------------------------------------------------------------------------
     def cambiarClase(self, event):
         logger.info("Cambiando de clase a : "+self.selectedClase.get())
         if self.selectedClase.get() is not None and self.selectedClase.get() != "":
@@ -167,10 +180,7 @@ class Principal(tk.Frame):
     #-------------------------------------------------------------------------------
     def actualizarClase(self, nomClase):
         self.frmTabla.cambiarDeClase(nomClase)
-        self.frmTabla.frmTabla.canvas.update()
-        self.frmTabla.frmTabla.canvas.update_idletasks()
-        self.frmTabla.frmTabla.interior.update_idletasks()
-        self.frmTabla.frmTabla.interior.update()
+        self.frmTabla.actualizarTabla()
         self.selectedClase.set(nomClase)
         
     #-------------------------------------------------------------------------------

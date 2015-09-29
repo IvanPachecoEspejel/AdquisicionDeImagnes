@@ -97,8 +97,8 @@ class Accion(object):
             raise Exception(Util.getMnsjIdioma('Accion', 'Error_Imagen_None'))
         
     #-----------------------------------------------------------------------------------------------
-    def generarArchivoDeDirecciones(self):
-        f = tkFileDialog.asksaveasfile(mode = "w", defaultextension=".txt")
+    def generarArchivoDeDirecciones(self, dirFile):
+        f = open(dirFile, 'w')
         if f is None:
             return
         for clase in self.dicClases:

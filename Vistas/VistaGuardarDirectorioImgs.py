@@ -13,7 +13,7 @@ from Modelo.Accion import Accion
 
 #########################################################################################
 
-class VistaAgregarImgURLWeb(tk.Toplevel):
+class VistaGuardarDirectorioImgs(tk.Toplevel):
     '''
     Ventana en la que se ofrece la posibilidad de crear una clase
     '''
@@ -24,7 +24,6 @@ class VistaAgregarImgURLWeb(tk.Toplevel):
         '''
         tk.Toplevel.__init__(self, master)
         self.padre = master
-#         self.attributes('-topmost', tk.TRUE)
         self.title("Guarda Nombre Del Directorio Principal")
         self.initUI()
 #         self.hide()
@@ -43,11 +42,11 @@ class VistaAgregarImgURLWeb(tk.Toplevel):
         opciones['parent'] = self
         opciones['title'] = 'Direccion del Directorio Principal'
         
-#         self.geometry('350x100+300+100')
+        self.geometry('450x250+300+100')
         self.protocol("WM_DELETE_WINDOW", "onexit")
         self.resizable(0,0)
         
-        frmFondo = ttk.Frame(self)
+        frmFondo = ttk.Frame(self, relief = "groove")
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         frmNorte = ttk.Labelframe(frmFondo, text = "Elige el nombre del Directorio Principal")
         
@@ -140,7 +139,7 @@ if __name__ == "__main__":
         def __init__(self,*args, **kwargs):
             root = tk.Tk.__init__(self, *args, **kwargs)
 
-            self.frmTabla = VistaAgregarImgURLWeb(root)
+            self.frmTabla = VistaGuardarDirectorioImgs(root)
             
         
     app = SampleApp()

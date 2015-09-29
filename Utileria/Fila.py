@@ -20,9 +20,9 @@ class Fila(object):
         '''
         
         self.strVarEstaSelecccionado = tk.StringVar()
-        self.chekbImg = ttk.Checkbutton(tabla.frmTabla.interior, variable = self.strVarEstaSelecccionado, command = self.checarSeleccion)
+        self.chekbImg = ttk.Checkbutton(tabla.frmScrollPane.interior, variable = self.strVarEstaSelecccionado, command = self.checarSeleccion)
         
-        self.lblRuta = tk.Text(tabla.frmTabla.interior,height=int(Util.getMnsjConf("TablaRutas", "altoCeldaRuta")))
+        self.lblRuta = tk.Text(tabla.frmScrollPane.interior,height=int(Util.getMnsjConf("TablaRutas", "altoCeldaRuta")))
         self.lblRuta.insert(1.0, img.source)
         self.lblRuta.config(state = tk.DISABLED)
         
@@ -32,7 +32,7 @@ class Fila(object):
                 int(Util.getMnsjConf("TablaRutas", "anchoImgMuestra"))
                 ), Image.ANTIALIAS)
         self.iconoImg = ImageTk.PhotoImage(self.iconoImg)
-        self.lblImg = ttk.Label(tabla.frmTabla.interior, image = self.iconoImg)
+        self.lblImg = ttk.Label(tabla.frmScrollPane.interior, image = self.iconoImg)
         
         self.tabla = tabla
         self.img = img
