@@ -4,12 +4,13 @@ Created on 25/08/2015
 @author: ivan
 '''
 from Accion import Accion
-import Utileria.Util as Util
-import Utileria.Valida as Valida
-from EliminarImagen import  EliminarImagen
 from AgregarImagen import AgregarImagen
 from CrearClase import CrearClase
+from EliminarImagen import  EliminarImagen
 from Utileria.Imagen import Imagen
+import Utileria.Util as Util
+import Utileria.Valida as Valida
+
 
 ####################################################################################
 logger = Util.getLogger("MoverImagen")

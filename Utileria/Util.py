@@ -4,12 +4,12 @@ Created on 23/08/2015
 @author: ivan
 '''
 
-from ConfigParser import SafeConfigParser, RawConfigParser
-import os
+from ConfigParser import RawConfigParser
 import logging.config
+import os
+
 
 ##########################################################################
-
 cfgIdioma = RawConfigParser()
 cfgIdioma.read('..'+os.path.sep+'MensajesIdioma.conf')
 
@@ -18,6 +18,8 @@ cfgModulo.read('..'+os.path.sep+'Configuracion.conf')
 
 logging.config.fileConfig('..'+os.path.sep+'logging.conf')
 
+RUTA_WEB    = 1     #Flag to identify a web path  
+RUTA_LOCAL  = 0     #Flag to identify a local path
 ##########################################################################
     
 #---------------------------------------------------------------------------

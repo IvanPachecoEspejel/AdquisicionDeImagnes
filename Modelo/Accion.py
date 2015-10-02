@@ -1,7 +1,8 @@
-import Utileria.Util as Util
-import tkFileDialog
-import Utileria.Valida as Valida
 import os
+
+import Utileria.Util as Util
+import Utileria.Valida as Valida
+
 
 ######################################################################################
 logger = Util.getLogger("Accion")

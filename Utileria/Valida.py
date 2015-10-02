@@ -8,6 +8,7 @@ Created on 22/08/2015
 
 import Util as Util
 
+
 logger = Util.getLogger("Valida")
 
 def isImagen(sourceRuta):

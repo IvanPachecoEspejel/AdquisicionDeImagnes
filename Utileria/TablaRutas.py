@@ -4,22 +4,22 @@ Created on 07/09/2015
 @author: ivan
 '''
 
-import Tkinter as tk
-from Utileria.ScrolledFrame import ScrolledFrame
-import Utileria.Util as Util
-from Utileria.Imagen import Imagen
-import ttk
-from PIL import Image
-from Utileria.Fila import Fila
-import ImageTk
 import re
+import ttk
+
+import Image
+import ImageTk
+
 from Modelo.Accion import Accion
 from Modelo.AgregarImagen import AgregarImagen
+import Tkinter as tk
+from Utileria.Imagen import Imagen
+from Utileria.ScrolledFrame import ScrolledFrame
+import Utileria.Util as Util
+
 
 #######################################################################
-
 log = Util.getLogger("TablaRutas")
-
 #######################################################################
 
 class TablaRutas (ttk.Frame):

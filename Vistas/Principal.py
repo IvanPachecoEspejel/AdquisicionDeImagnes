@@ -1,24 +1,25 @@
-import Tkinter as tk
 from Tkinter import StringVar
+import tkFileDialog
 import ttk
-from Utileria import Util
+
 from Modelo.Accion import Accion
+from Modelo.AgregarImagen import AgregarImagen
 from Modelo.CrearClase import CrearClase
+from Modelo.EliminarClase import EliminarClase
+from Modelo.EliminarImagen import EliminarImagen
+from Modelo.MoverImagen import MoverImagen
+import Tkinter as tk
+from Utileria import Util
 from Utileria.TablaRutas import TablaRutas
 from Vistas.VistaCrearClase import VistaCrearClase
+from Vistas.VistaGuardarDirectorioImgs import VistaGuardarDirectorioImgs
 from Vistas.VistaMenuAgregarImagenes import VistaMenuAgregarImagenes
 from Vistas.VistaMoverSeleccionados import VistaMoverSeleccionados
-from Vistas.VistaGuardarDirectorioImgs import VistaGuardarDirectorioImgs
-from Modelo.EliminarImagen import EliminarImagen
-from Modelo.AgregarImagen import AgregarImagen
-from Modelo.EliminarClase import EliminarClase
-from Modelo.MoverImagen import MoverImagen
-import tkFileDialog
+
+
 # from PIL import Image
 # import ImageTk
-
 ########################################################################
-
 logger = Util.getLogger("Principal")
 
 ########################################################################

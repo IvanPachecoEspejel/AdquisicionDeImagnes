@@ -4,15 +4,17 @@ Created on 18/09/2015
 @author: ivan
 '''
 
-import ttk
-import Tkinter as tk
+import os
 import tkFileDialog 
+import ttk
+
+from Modelo.Accion import Accion
+from Modelo.AgregarImagen import AgregarImagen
+import Tkinter as tk
 from Utileria import Util
 from Utileria.Imagen import Imagen
-from Modelo.AgregarImagen import AgregarImagen
 from Vistas.VistaAgregarImgURLWeb import VistaAgregarImgURLWeb
-from Modelo.Accion import Accion
-import os
+
 
 logger = Util.getLogger("VistaMenuAgregarImagenes")
 
@@ -143,8 +145,10 @@ class VistaMenuAgregarImagenes(tk.Toplevel):
             AgregarImagen(a).efectuarAccion()
             
             self.frmVistaAgrImgURLWeb.hide()
+            self.frmVistaAgrImgURLWeb.nomNvaImg.set("");
         except Exception as ex:
             logger.error(ex)
+            raise ex
         self.padre.actualizarClase(Accion.nomClaseDefault)
             
     #----------------------------------------------------------------------    

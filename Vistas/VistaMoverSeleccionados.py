@@ -5,10 +5,12 @@ Created on 18/09/2015
 '''
 
 import ttk
-import Tkinter as tk
+
 from Modelo.Accion import Accion
 from Modelo.MoverImagen import MoverImagen
+import Tkinter as tk
 from Utileria import Util
+
 
 #########################################################################################
 logger = Util.getLogger("VistaMoverSeleccionados")

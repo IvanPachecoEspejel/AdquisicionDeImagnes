@@ -6,8 +6,10 @@ Created on 24/08/2015
 
 from Accion import Accion
 from CrearClase import CrearClase
-import Utileria.Util as Util
 from Utileria.Imagen import Imagen
+import Utileria.Util as Util
+
+
 ###########################################################################################
 logger = Util.getLogger("Agrega")
 ###########################################################################################

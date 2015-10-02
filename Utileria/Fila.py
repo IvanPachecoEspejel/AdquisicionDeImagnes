@@ -1,9 +1,13 @@
-from Utileria import Util
-from PIL import Image
+import cStringIO
+import ttk
+import urllib
+
+import Image
+import ImageTk
 
 import Tkinter as tk
-import ttk
-import ImageTk
+from Utileria import Util
+
 
 log = Util.getLogger("Fila") 
 
@@ -26,13 +30,21 @@ class Fila(object):
         self.lblRuta.insert(1.0, img.source)
         self.lblRuta.config(state = tk.DISABLED)
         
-        self.iconoImg = Image.open(img.source)
+        if img.tipoRuta == Util.RUTA_LOCAL:        
+            self.iconoImg = Image.open(img.source)
+        else:
+            try:
+                self.iconoImg = Image.open(cStringIO.StringIO(urllib.urlopen(img.source).read()))
+            except IOError as io:
+                log.error(io)
+                raise io
+             
         self.iconoImg.thumbnail((
                 int(Util.getMnsjConf("TablaRutas", "altoImgMuestra")),
                 int(Util.getMnsjConf("TablaRutas", "anchoImgMuestra"))
                 ), Image.ANTIALIAS)
-        self.iconoImg = ImageTk.PhotoImage(self.iconoImg)
-        self.lblImg = ttk.Label(tabla.frmScrollPane.interior, image = self.iconoImg)
+        self.iconoPhotoImg = ImageTk.PhotoImage(self.iconoImg)
+        self.lblImg = ttk.Label(tabla.frmScrollPane.interior, image = self.iconoPhotoImg)
         
         self.tabla = tabla
         self.img = img

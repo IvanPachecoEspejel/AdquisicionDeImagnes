@@ -5,10 +5,11 @@ Created on 18/09/2015
 '''
 
 import ttk
+
 import Tkinter as tk
 
-#########################################################################################
 
+#########################################################################################
 class VistaCrearClase(tk.Toplevel):
     '''
     Ventana en la que se ofrece la posibilidad de crear una clase

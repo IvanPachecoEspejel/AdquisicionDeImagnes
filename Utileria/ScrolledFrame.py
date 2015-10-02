@@ -1,5 +1,7 @@
-import Tkinter as tk
 import ttk
+
+import Tkinter as tk
+
 
 #######################################################################
 class ScrolledFrame(ttk.Frame):

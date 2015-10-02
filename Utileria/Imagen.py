@@ -5,13 +5,11 @@ Created on 22/08/2015
 
 import os
 
-import Util as Util
-import Valida as Valida
 import Clasifica as Clasifica
+import Util as Util
 from Utileria.Fila import Fila
-import numpy
-from PIL import Image
-import Image as Img
+import Valida as Valida
+
 
 #################################################################################################
 logger = Util.getLogger("Imagen")
@@ -21,22 +19,24 @@ class Imagen(object):
     
     #------------------------------------------------------------------------------------
     def __init__(self, source, widgetTabla=None, nomClaseCorrecto = None):
-        if Valida.isImagen(source):
-            self.source = source
-            self.tipoRuta = Clasifica.tipoRuta(source);
-            self.nomClaseCorrecto = nomClaseCorrecto
-            if widgetTabla is not None:
-                self.widgetFila = Fila(self, widgetTabla)
-        else:
+        
+        if not Valida.isImagen(source):
             raise Exception(Util.getMnsjIdioma("Imagen", "Error_Ruta_Invalida")%(source))
+        
+        self.source = source
+        self.tipoRuta = Clasifica.tipoRuta(source);
+        self.nomClaseCorrecto = nomClaseCorrecto
+        if widgetTabla is not None: # Para realizar pruebas unitaras
+            self.widgetFila = Fila(self, widgetTabla)
+            
     
     #------------------------------------------------------------------------------------
     def getPath(self):
         '''Regresa la ruta sin el arhcivo'''
-        if self.tipoRuta == Clasifica.RUTA_WEB:
+        if self.tipoRuta == Util.RUTA_WEB:
             return self.source[:self.source.rfind('/')]
         
-        elif self.tipoRuta == Clasifica.RUTA_LOCAL:
+        elif self.tipoRuta == Util.RUTA_LOCAL:
             return self.source[:self.source.rfind(os.path.sep)]
         
         return None;
@@ -45,10 +45,10 @@ class Imagen(object):
     def getNomArchivo(self):
         '''Regresa el nombre del archvio sin extencion ni ruta'''
         
-        if self.tipoRuta == Clasifica.RUTA_WEB:
+        if self.tipoRuta == Util.RUTA_WEB:
             return self.source[self.source.rfind('/')+1:self.source.rfind('.')]
         
-        elif self.tipoRuta == Clasifica.RUTA_LOCAL:
+        elif self.tipoRuta == Util.RUTA_LOCAL:
             return self.source[self.source.rfind(os.path.sep)+1:self.source.rfind('.')]
         
         return None;
@@ -61,7 +61,8 @@ class Imagen(object):
     #------------------------------------------------------------------------------------
     def guardarImagen(self, direccionSalida):
         try:
-            Img.open(self.source).save(direccionSalida)
+            #FIXME: No funcion guardado de imagen
+            self.widgetFila.iconoImg.save(direccionSalida)
             logger.info("Imagen Guardada en "+direccionSalida)
         except IOError as ex:
             logger.error(ex)

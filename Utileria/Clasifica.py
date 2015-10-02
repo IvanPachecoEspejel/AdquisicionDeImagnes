@@ -1,23 +1,23 @@
 import os
-import requests
-
-RUTA_WEB    = 1     #Flag to identify a web path  
-RUTA_LOCAL  = 0     #Flag to identify a local path
 
 import Util as Util
+
 
 logger = Util.getLogger("Clasifica")
 
 def tipoRuta(sourceRuta = ""):
     ''' Valida si la ruta existe y la clasifica como WEB o LOCAL '''
     
-    try:
-        requests.get(sourceRuta)
-        return RUTA_WEB
-    except:
-        if os.path.isfile(sourceRuta):
-            return RUTA_LOCAL
-        raise Exception(Util.getMnsjIdioma("Clasifica", "Error_Ruta_Invalida"))
+    protocolos = Util.getMnsjConf('Validacion', 'ProtocolosImgs').split(" ")
+    
+    if os.path.sep in sourceRuta or '/' in sourceRuta:
+        return Util.RUTA_LOCAL
+    else:    
+        for protocolo in protocolos:
+            if sourceRuta.startswith(protocolo+"://"):
+                return Util.RUTA_WEB
+            
+    raise Exception(Util.getMnsjIdioma("Clasifica", "Error_Ruta_Invalida")%sourceRuta)
 
 if __name__ == "__main__":
      
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         
     logger.info("TEST: RUTA WEB")
     try:
-        print(tipoRuta("http://blogs.computing.dcu.ie/wordpress/brogand2/wp-content/uploads/sites/183/2015/03/config-parser1.png"))
+        print(tipoRuta("http://image.slidesharecdn.com/desarrollodeaplicacioneswebii-150422032827-conversion-gate02/95/desarrollo-de-aplicaciones-web-ii-61-638.jpg"))
     except Exception as e:
         logger.error(e)
         

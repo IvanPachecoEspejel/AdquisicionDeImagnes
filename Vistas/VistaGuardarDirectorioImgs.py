@@ -4,15 +4,16 @@ Created on 18/09/2015
 @author: ivan
 '''
 
-import ttk
-import Tkinter as tk
+import os
 import tkFileDialog
 import tkMessageBox
-import os
+import ttk
+
 from Modelo.Accion import Accion
+import Tkinter as tk
+
 
 #########################################################################################
-
 class VistaGuardarDirectorioImgs(tk.Toplevel):
     '''
     Ventana en la que se ofrece la posibilidad de crear una clase

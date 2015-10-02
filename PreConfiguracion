@@ -1,0 +1,16 @@
+Windows...
+1.-Se necesita Python para la arquitectura de 32 bits
+2.-Se necesita la biblioteca requests para descargar imagenes de internet
+	Ejecutar en consola
+	C:\Python27\Scripts> easy_install.exe requests
+3.-Se necesita la biblioteca PIL para manejar las imagenes
+	Descargar la version para la version de python que se tiene instalada de esta pagina
+	http://www.pythonware.com/products/pil/
+
+Linux...
+1.-Se necesita la biblioteca requests para descargar imagenes de internet
+	Se puede instalar de la siguiente forma 
+	pip install requests
+2.- Se necesita la biblioteca PIL para mejar las imagenes
+	Se puede instalar de la siguiente forma
+	pip install PIL.
