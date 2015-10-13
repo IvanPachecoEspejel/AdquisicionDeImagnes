@@ -20,6 +20,8 @@ logging.config.fileConfig('..'+os.path.sep+'logging.conf')
 
 RUTA_WEB    = 1     #Flag to identify a web path  
 RUTA_LOCAL  = 0     #Flag to identify a local path
+
+rutaImg_ImgNoEncontrada = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+os.path.sep+"Imgs"+os.path.sep+"imgNoEncontrada.jpeg"
 ##########################################################################
     
 #---------------------------------------------------------------------------
@@ -51,4 +53,5 @@ if __name__ == '__main__':
     logger.info("TEST IDIOMA MENSAJE")
     print getMnsjIdioma("Imagen", "Error_Ruta_Invalida")
     
+    print rutaImg_ImgNoEncontrada
     

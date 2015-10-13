@@ -44,7 +44,7 @@ class Principal(tk.Frame):
         Crea y empaqueta todos low widgets de la ventana
         '''
         self.padre.title("Adquicicion de imagenes")
-        
+        #*****************************************************************************************
         frmHeader = ttk.Frame(self.padre, relief = tk.RAISED)
         mbMenu=  ttk.Menubutton(frmHeader, text="Archivo")
         mbMenu.menu = tk.Menu(mbMenu)
@@ -53,16 +53,19 @@ class Principal(tk.Frame):
         mbMenu.menu.add_command(label = "Generar Directorio de Imagenes", command = self.abrirVistaGuardarDirectorioImgs)
         mbMenu.pack(side = tk.LEFT)
         frmHeader.pack(side = tk.TOP, fill = tk.X, expand = tk.TRUE)
+        #*****************************************************************************************
         
+        #*****************************************************************************************
         frmNorte = ttk.Frame(self.padre)
-        
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         frmNorteOeste  = ttk.Frame(frmNorte)        
         
         lblLogo = ttk.Label(frmNorteOeste, background = "green", text="Logo")
         lblLogo.pack(fill = tk.BOTH)
         
         frmNorteOeste.grid(column = 0, row = 0)
-        
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         frmNorteEste = ttk.Frame(frmNorte)
          
         btnAgregarImg = ttk.Button(frmNorteEste, 
@@ -77,16 +80,18 @@ class Principal(tk.Frame):
         btnCrearClase.grid(column = 1, row = 1, pady = 5)
         
         frmNorteEste.grid(column = 1, row = 0)
-        
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         frmNorte.grid_columnconfigure(0,weight = 1)
         frmNorte.grid_columnconfigure(1,weight = 1)
         
         frmNorte.pack(fill = tk.X, side=tk.TOP)
+        #*****************************************************************************************       
         
         ttk.Separator(self.padre, orient = tk.HORIZONTAL).pack()
         
+        #*****************************************************************************************
         frmCenter = ttk.Frame(self.padre)
-        
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
         frmCenterOeste = ttk.Labelframe(frmCenter, text = "Acciones sobre la tabla")
         
         ttk.Label(frmCenterOeste, text = "Cambia de clase: ").pack(fill = tk.Y, anchor = tk.NW)         
@@ -118,16 +123,17 @@ class Principal(tk.Frame):
                    command = self.deshacerAccion).pack(fill = tk.Y, pady = 5)
         
         frmCenterOeste.pack(fill = tk.BOTH, side = tk.LEFT, expand = tk.TRUE, padx = 5)
-        
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         frmCenterEste = ttk.Labelframe(frmCenter, text = "Imagenes de la clase")
         
         self.frmTabla = TablaRutas(frmCenterEste)
         self.frmTabla.pack(fill = tk.BOTH, expand = tk.TRUE)
         
         frmCenterEste.pack(fill = tk.BOTH, side = tk.LEFT, expand = tk.TRUE, padx = 5)
-        
-        frmCenter.pack(fill = tk.BOTH, side = tk.TOP, expand= tk.TRUE)
-        
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        frmCenter.pack(fill = tk.BOTH, side = tk.TOP, expand= tk.TRUE)        
+        #*****************************************************************************************
         #++++++++++++++++++++++++ Ventanas Emergentes ++++++++++++++++++++++++#
         self.frmVentanaCrearClase = VistaCrearClase(self, self.crearClase)
         self.frmVentanaMenuAgrImgs = VistaMenuAgregarImagenes(self, self.frmTabla)

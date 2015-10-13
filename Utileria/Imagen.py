@@ -4,6 +4,7 @@ Created on 22/08/2015
 '''
 
 import os
+import ttk
 
 import Clasifica as Clasifica
 import Util as Util
@@ -61,12 +62,16 @@ class Imagen(object):
     #------------------------------------------------------------------------------------
     def guardarImagen(self, direccionSalida):
         try:
-            #FIXME: No funcion guardado de imagen
-            self.widgetFila.iconoImg.save(direccionSalida)
+            if self.widgetFila.widgetPrevisualizacion is not None and self.widgetFila.widgetPrevisualizacion.__class__ == ttk.Label:
+                self.widgetFila.widgetPrevisualizacion.save(direccionSalida)
+            else:
+                self.widgetFila.crearIconoImagen().save(direccionSalida)
             logger.info("Imagen Guardada en "+direccionSalida)
         except IOError as ex:
             logger.error(ex)
             logger.error("No se pudo guardar la imagen "+self.source)
+            
+    
             
     #------------------------------------------------------------------------------------
     def __eq__(self, imagen):

@@ -27,7 +27,7 @@ class VistaGuardarDirectorioImgs(tk.Toplevel):
         self.padre = master
         self.title("Guarda Nombre Del Directorio Principal")
         self.initUI()
-#         self.hide()
+        self.hide()
         
     #----------------------------------------------------------------------
     

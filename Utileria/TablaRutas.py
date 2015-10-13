@@ -36,6 +36,8 @@ class TablaRutas (ttk.Frame):
         
         self.lstImgsFiltradas = [] 
         self.lstImgsSeleccionadas = []
+        self.boolVarVerImgs = tk.BooleanVar()
+        self.boolVarVerImgs.set(tk.FALSE)
         
         self.expRegBusqueda = tk.StringVar()
         ttk.Entry(self, textvariable=self.expRegBusqueda).pack(fill = tk.X)
@@ -121,7 +123,6 @@ class TablaRutas (ttk.Frame):
         '''
         Crea los widgets de la cabezera de la tabla y los empaqueta en ella
         '''
-        cabezera = Util.getMnsjConf("TablaRutas", "cabezera").split(",")
         self.strVarEstanSelecTodos = tk.StringVar()
         self.strVarEstanSelecTodos.set('0')
         ttk.Checkbutton(self.frmScrollPane.interior, 
@@ -130,11 +131,17 @@ class TablaRutas (ttk.Frame):
                                                                            column = 0,
                                                                            padx = 5)
         
-        for i in range(len(cabezera)):
-            ttk.Label(self.frmScrollPane.interior, 
-                      text = cabezera[i]).grid(row = 0, 
-                                                 column = i+1,
-                                                 padx = 5)
+        ttk.Label(self.frmScrollPane.interior, 
+                  text = "Ruta de la Imagen").grid(row = 0, 
+                                                   column = 1,
+                                                   padx = 5)
+                  
+        ttk.Checkbutton(self.frmScrollPane.interior,
+                        command = self.empaquetarWidgetsTabla,
+                        text = "Ver Imagenes", 
+                        variable = self.boolVarVerImgs).grid(row = 0, 
+                                                             column = 2,
+                                                             padx = 5)
         
         self.frmScrollPane.interior.grid_columnconfigure(0, weight = 1)    
         self.frmScrollPane.interior.grid_columnconfigure(1, weight = 2)
